@@ -124,6 +124,8 @@ namespace Hu.MachineVision.Ui
            for (int i = 0; i < Project.CcdCount; i++)
            {               
                var edit = EditStation.GetStation(i);
+               
+               edit.AddAuxUi();
            }
        }
 

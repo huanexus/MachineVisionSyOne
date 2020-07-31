@@ -41,6 +41,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\Cognex\VisionPro\ReferencedAssemblies\Cognex.VisionPro.Display.Controls.dll</HintPath>
     </Reference>
+    <Reference Include="Cognex.VisionPro.ImageProcessing, Version=59.2.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Cognex\VisionPro\ReferencedAssemblies\Cognex.VisionPro.ImageProcessing.dll</HintPath>
+    </Reference>
     <Reference Include="Cognex.VisionPro.Inspection, Version=59.2.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505" />
     <Reference Include="Cognex.VisionPro.Inspection.Controls, Version=59.2.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505" />
     <Reference Include="Cognex.VisionPro.ToolGroup, Version=59.2.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505" />
@@ -107,8 +111,10 @@
     <Compile Include="Ui\UiLogDialog.cs" />
     <Compile Include="Ui\UiMainForm.cs" />
     <Compile Include="Ui\UiTabControls.cs" />
+    <Compile Include="VisionPro\CcdTerminal.cs" />
     <Compile Include="VisionPro\DisplayStation.cs" />
     <Compile Include="VisionPro\EditStation.cs" />
+    <Compile Include="VisionPro\ToolBlockStation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
