@@ -16,7 +16,7 @@ using Cognex.VisionPro.ToolBlock;
 
 namespace Hu.MachineVision.VisionPro
 {
-    public class DisplayStation
+    public class StationDisplay
     {
         public static UiTabControls MyTabs { get { return UiMainForm.MyTabs; } }
         public static Panel[] Panels { get; set; }
@@ -25,10 +25,10 @@ namespace Hu.MachineVision.VisionPro
         public TabPage Tp { get { return MyTabs["Display", 0]; } }
         public Panel Window { get { return Panels[CcdId]; } }
         public CogRecordDisplay Display { get { return DisplayWindows[CcdId]; } }
-        public static Dictionary<int, DisplayStation> Stations { get; set; }
+        public static Dictionary<int, StationDisplay> Stations { get; set; }
         public static int CcdCount { get { return DbScheme.GetUiParams("CcdCount"); } }
 
-        static DisplayStation()
+        static StationDisplay()
         {
             var db = DbScheme.GetConnection("Main");
             int ccdCount = CcdCount;
@@ -65,10 +65,10 @@ namespace Hu.MachineVision.VisionPro
                 Panels[i].Tag = i;  
             }                       
 
-            Stations = new Dictionary<int, DisplayStation>();
+            Stations = new Dictionary<int, StationDisplay>();
             for (int i = 0; i < ccdCount; i++)
             {
-                Stations[i] = new DisplayStation(i);
+                Stations[i] = new StationDisplay(i);
                 Stations[i].SetDoubleClick();
                    
                 Label myLabel = new Label();
@@ -79,16 +79,16 @@ namespace Hu.MachineVision.VisionPro
             }            
         }
 
-        public static DisplayStation GetStation(int ccd)
+        public static StationDisplay GetStation(int ccd)
         {
             if (!Stations.ContainsKey(ccd))
             {
-                Stations[ccd] = new DisplayStation(ccd);
+                Stations[ccd] = new StationDisplay(ccd);
             }
             return Stations[ccd];
         }
 
-        public DisplayStation(int ccdId)
+        public StationDisplay(int ccdId)
         {
             CcdId = ccdId;
         }

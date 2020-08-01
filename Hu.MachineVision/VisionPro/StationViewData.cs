@@ -19,13 +19,17 @@ using Hu.MachineVision.Database;
 
 namespace Hu.MachineVision.VisionPro
 {
-    public class DataViewStation
+    public interface IDataViewStation
+    {
+       IDataViewStation GetStation(int ccd);
+    }
+    public class StationViewData: IDataViewStation
     {
         public static UiTabControls MyTabs { get { return UiMainForm.MyTabs; } }
         public static Dictionary<string, Panel>[] Panels { get; set; }
         public static DataGridView[] Dgvs { get; set; }
 
-        public static ToolBlockEditStation[] EditStations { get; set; }
+        public static StationToolBlockEdit[] EditStations { get; set; }
 
         public static int CcdCount { get { return DbHelper.GetUiParams("CcdCount"); } }
        
@@ -33,13 +37,17 @@ namespace Hu.MachineVision.VisionPro
         public TabPage Tp { get { return MyTabs["Data", CcdId]; } }
         public Panel ZoneMain { get { return Panels[CcdId]["Main"]; } }
         public DataGridView Dgv { get { return Dgvs[CcdId]; } }
-        public ToolBlockEditStation EditStation { get {return EditStations[CcdId];} }
+        public StationToolBlockEdit EditStation { get {return EditStations[CcdId];} }
 
-        static DataViewStation()
+        public static StationViewData[] Stations { get; set; } 
+
+        static StationViewData()
         {
             Dgvs = new DataGridView[CcdCount];
-            EditStations = new ToolBlockEditStation[CcdCount];
+            EditStations = new StationToolBlockEdit[CcdCount];
             Panels = new Dictionary<string, Panel>[CcdCount];
+
+            Stations = new StationViewData[CcdCount];
             
             for(int i = 0; i < CcdCount; i++)
             {
@@ -54,13 +62,28 @@ namespace Hu.MachineVision.VisionPro
                 Panels[i]["Main"].Controls.Add(Dgvs[i]);
                 Dgvs[i].Dock = DockStyle.Fill;
 
-                EditStations[i] = ToolBlockEditStation.GetStation(i);
+                EditStations[i] = StationToolBlockEdit.GetStation(i);
+            }
+
+            for(int i = 0; i < CcdCount; i++)
+            {
+                Stations[i] = new StationViewData(i);
             }
         }
 
-        public DataViewStation(int ccdId)
+        public StationViewData(int ccdId)
         {
             CcdId = ccdId;
+        }
+
+        public DataGridView this[int ccdId]
+        {
+            get { return Dgvs[ccdId]; }
+        }
+
+        public IDataViewStation GetStation(int ccd)
+        {
+            return Stations[ccd];
         }
     }
 }

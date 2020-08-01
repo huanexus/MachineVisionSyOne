@@ -18,7 +18,7 @@ using Hu.MachineVision.Database;
 
 namespace Hu.MachineVision.VisionPro
 {
-    public class ToolBlockEditStation
+    public class StationToolBlockEdit
     {
         public static UiTabControls MyTabs { get { return UiMainForm.MyTabs; } }
         public static Dictionary<string, Panel>[] Panels { get; set; }
@@ -28,11 +28,11 @@ namespace Hu.MachineVision.VisionPro
         public Panel ZoneMain { get { return Panels[CcdId]["Main"]; } }
         public Panel ZoneAux { get { return Panels[CcdId]["Aux"];}}
         public CogToolBlockEditV2 EditWindow { get { return EditWindows[CcdId]; } }
-        public static Dictionary<int, ToolBlockEditStation> Stations { get; set; }
+        public static Dictionary<int, StationToolBlockEdit> Stations { get; set; }
 
-        public ToolBlockStation MyToolBlockStation { get; set; }
+        public StationToolBlock MyToolBlockStation { get; set; }
 
-        static ToolBlockEditStation()
+        static StationToolBlockEdit()
         {
             var db = DbScheme.GetConnection("Main");
             int ccdCount = db.ExecuteScalar<int>("select data from UiParams where name = ?", "CcdCount");
@@ -63,25 +63,25 @@ namespace Hu.MachineVision.VisionPro
                 
             }
 
-            Stations = new Dictionary<int, ToolBlockEditStation>();
+            Stations = new Dictionary<int, StationToolBlockEdit>();
             for (int i = 0; i < ccdCount; i++)
             {
-                Stations[i] = new ToolBlockEditStation(i);
+                Stations[i] = new StationToolBlockEdit(i);
             }
         }
 
-        public ToolBlockEditStation(int ccd)
+        public StationToolBlockEdit(int ccd)
         {            
             CcdId = ccd;
-            MyToolBlockStation = new ToolBlockStation(CcdId);
+            MyToolBlockStation = new StationToolBlock(CcdId);
             EditWindow.Subject = MyToolBlockStation.MyCogToolBlock;
         }
 
-        public static ToolBlockEditStation GetStation(int ccd)
+        public static StationToolBlockEdit GetStation(int ccd)
         {
             if (!Stations.ContainsKey(ccd))
             {
-                Stations[ccd] = new ToolBlockEditStation(ccd);
+                Stations[ccd] = new StationToolBlockEdit(ccd);
             }
             return Stations[ccd];
         }
@@ -144,8 +144,6 @@ namespace Hu.MachineVision.VisionPro
 
                 btnCommands[i].Click += RunAuxCommand;
             }
-
-
 
         }
 

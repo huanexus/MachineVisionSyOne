@@ -112,10 +112,13 @@
     <Compile Include="Ui\UiMainForm.cs" />
     <Compile Include="Ui\UiTabControls.cs" />
     <Compile Include="VisionPro\CcdTerminal.cs" />
-    <Compile Include="VisionPro\DataViewStation.cs" />
-    <Compile Include="VisionPro\DisplayStation.cs" />
-    <Compile Include="VisionPro\ToolBlockEditStation.cs" />
-    <Compile Include="VisionPro\ToolBlockStation.cs" />
+    <Compile Include="VisionPro\StationViewCompValue.cs" />
+    <Compile Include="VisionPro\StationViewData.cs" />
+    <Compile Include="VisionPro\StationDisplay.cs" />
+    <Compile Include="VisionPro\StationViewRawData.cs" />
+    <Compile Include="VisionPro\StationViewRefValue.cs" />
+    <Compile Include="VisionPro\StationToolBlockEdit.cs" />
+    <Compile Include="VisionPro\StationToolBlock.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

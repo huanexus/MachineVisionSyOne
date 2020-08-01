@@ -18,7 +18,7 @@ using Hu.MachineVision.Ui;
 
 namespace Hu.MachineVision.VisionPro
 {
-   public class ToolBlockStation
+   public class StationToolBlock
     {
        public int CcdId { get; set; }
        public int OfflineImageCycle { get; set; }
@@ -27,7 +27,7 @@ namespace Hu.MachineVision.VisionPro
 
        public  ActionBlock<CcdTerminalIn> VtInBlock { get; set; }
 
-       public ToolBlockStation(int ccdId)
+       public StationToolBlock(int ccdId)
        {
            CcdId = ccdId;
            OfflineImageCycle = 1;

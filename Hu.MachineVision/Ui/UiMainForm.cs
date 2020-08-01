@@ -114,7 +114,7 @@ namespace Hu.MachineVision.Ui
            for (int i = 0; i < Project.CcdCount; i++)
            {
                infos[i].Show();
-               var display = DisplayStation.GetStation(i);
+               var display = StationDisplay.GetStation(i);
            }
        }
 
@@ -123,7 +123,7 @@ namespace Hu.MachineVision.Ui
           
            for (int i = 0; i < Project.CcdCount; i++)
            {               
-               var edit = ToolBlockEditStation.GetStation(i);
+               var edit = StationToolBlockEdit.GetStation(i);
                
                edit.AddAuxUi();
            }
@@ -134,8 +134,26 @@ namespace Hu.MachineVision.Ui
 
            for (int i = 0; i < Project.CcdCount; i++)
            {
-               var station = new DataViewStation(i);
+               var station = new StationViewData(i);
                
+           }
+
+           for (int i = 0; i < Project.CcdCount; i++)
+           {
+               var station = new StationViewRawData(i);
+
+           }
+
+           for (int i = 0; i < Project.CcdCount; i++)
+           {
+               var station = new StationViewCompValue(i);
+
+           }
+
+           for (int i = 0; i < Project.CcdCount; i++)
+           {
+               var station = new StationViewRefValue(i);
+
            }
        }
 
