@@ -33,8 +33,9 @@ namespace Hu.MachineVision.VisionPro
            OfflineImageCycle = 1;
            var db = DbScheme.GetConnection("Data");
            int brandId = db.ExecuteScalar<int>("select data from RunStatus where name = ?", "BrandId");
-           VppFileName = Helper.VppHelper.FindVpps(CcdId, brandId)[""];
+           VppFileName = Helper.VppHelper.FindVpps(CcdId, brandId)[""];          
            LoadVpp();
+           VtInBlock = new ActionBlock<CcdTerminalIn>(x => x.RunToolBlock(MyCogToolBlock));
        }
 
        public CogToolBlock LoadVpp()
@@ -98,7 +99,41 @@ namespace Hu.MachineVision.VisionPro
 
        internal void RunOffline()
        {
-          // throw new NotImplementedException();
+           string vppHome = Path.GetDirectoryName(VppFileName);
+           DirectoryInfo diImage = new DirectoryInfo(Path.Combine(vppHome, "image"));
+           if (!diImage.Exists)
+           {
+               diImage.Create();
+           }
+
+           int imageCount = 1;
+           var toolBlock = MyCogToolBlock;
+
+           if(OfflineImageCycle == 0)
+           {
+               CogIPOneImageTool[] myCogIPOneImageTools = toolBlock.Tools.OfType<CogIPOneImageTool>().ToArray();
+               for(int i = 0; i < imageCount; i++)
+               {
+                   CogImage8Grey inputImage = myCogIPOneImageTools[i].OutputImage as CogImage8Grey;
+                   CcdTerminalIn vtIn = new CcdTerminalIn(inputImage, i);
+                   VtInBlock.Post(vtIn);
+               }
+
+               return;
+           }
+
+           for (int i = 0; i < imageCount; i++)
+           {
+               var imageName = string.Format("{0}-{1}-{2}.bmp", CcdId, OfflineImageCycle, i + 1).Trim('-');
+               var imageFile = Path.Combine(diImage.FullName, imageName);
+               if (File.Exists(imageFile))
+               {
+                   Bitmap bmpFile = new Bitmap(imageFile);
+                   CogImage8Grey inputImage = new CogImage8Grey(bmpFile);
+                   CcdTerminalIn vtIn = new CcdTerminalIn(inputImage, i);
+                   VtInBlock.Post(vtIn);
+               }
+           }       
        }
     }
 }

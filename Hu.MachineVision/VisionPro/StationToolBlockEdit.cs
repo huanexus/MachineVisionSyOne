@@ -177,7 +177,8 @@ namespace Hu.MachineVision.VisionPro
 
         private void nudImageCycle_ValueChanged(object sender, EventArgs e)
         {
-            //throw new NotImplementedException();
+            var nud = sender as NumericUpDown;
+            MyToolBlockStation.OfflineImageCycle = Decimal.ToInt32(nud.Value);    
         }
 
 
