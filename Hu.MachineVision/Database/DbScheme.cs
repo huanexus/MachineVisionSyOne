@@ -31,10 +31,12 @@ namespace Hu.MachineVision.Database
             }
             DbFileNames["Main"] = Path.Combine(DbHome, "main.db3");
             DbFileNames["Data"] = Path.Combine(DbHome, "data.db3");
+            DbFileNames["Mes"] = Path.Combine(DbHome, "mes.db3");
             DbFileNames[""] = ":memory:";
             Connections = new Dictionary<string, SQLiteConnection>();            
             Connections["Main"] = GetConnection("Main");
             Connections["Data"] = GetConnection("Data");
+            Connections["Mes"] = GetConnection("Mes");
         }
 
         public static SQLiteConnection GetConnection(string name)

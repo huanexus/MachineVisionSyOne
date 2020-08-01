@@ -74,5 +74,10 @@ namespace MachineVisionCGQ
             long stamp = MyFinsTcp.ReadTimestamp();
             UiMainForm.LogMessage(stamp.ToString());
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            DbHelper.SendData("");
+        }
     }
 }
