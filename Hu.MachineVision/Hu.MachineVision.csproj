@@ -112,8 +112,9 @@
     <Compile Include="Ui\UiMainForm.cs" />
     <Compile Include="Ui\UiTabControls.cs" />
     <Compile Include="VisionPro\CcdTerminal.cs" />
+    <Compile Include="VisionPro\DataViewStation.cs" />
     <Compile Include="VisionPro\DisplayStation.cs" />
-    <Compile Include="VisionPro\EditStation.cs" />
+    <Compile Include="VisionPro\ToolBlockEditStation.cs" />
     <Compile Include="VisionPro\ToolBlockStation.cs" />
   </ItemGroup>
   <ItemGroup>

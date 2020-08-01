@@ -18,7 +18,7 @@ using Hu.MachineVision.Database;
 
 namespace Hu.MachineVision.VisionPro
 {
-    public class EditStation
+    public class ToolBlockEditStation
     {
         public static UiTabControls MyTabs { get { return UiMainForm.MyTabs; } }
         public static Dictionary<string, Panel>[] Panels { get; set; }
@@ -28,11 +28,11 @@ namespace Hu.MachineVision.VisionPro
         public Panel ZoneMain { get { return Panels[CcdId]["Main"]; } }
         public Panel ZoneAux { get { return Panels[CcdId]["Aux"];}}
         public CogToolBlockEditV2 EditWindow { get { return EditWindows[CcdId]; } }
-        public static Dictionary<int, EditStation> Stations { get; set; }
+        public static Dictionary<int, ToolBlockEditStation> Stations { get; set; }
 
         public ToolBlockStation MyToolBlockStation { get; set; }
 
-        static EditStation()
+        static ToolBlockEditStation()
         {
             var db = DbScheme.GetConnection("Main");
             int ccdCount = db.ExecuteScalar<int>("select data from UiParams where name = ?", "CcdCount");
@@ -63,25 +63,25 @@ namespace Hu.MachineVision.VisionPro
                 
             }
 
-            Stations = new Dictionary<int, EditStation>();
+            Stations = new Dictionary<int, ToolBlockEditStation>();
             for (int i = 0; i < ccdCount; i++)
             {
-                Stations[i] = new EditStation(i);
+                Stations[i] = new ToolBlockEditStation(i);
             }
         }
 
-        public EditStation(int ccd)
+        public ToolBlockEditStation(int ccd)
         {            
             CcdId = ccd;
             MyToolBlockStation = new ToolBlockStation(CcdId);
             EditWindow.Subject = MyToolBlockStation.MyCogToolBlock;
         }
 
-        public static EditStation GetStation(int ccd)
+        public static ToolBlockEditStation GetStation(int ccd)
         {
             if (!Stations.ContainsKey(ccd))
             {
-                Stations[ccd] = new EditStation(ccd);
+                Stations[ccd] = new ToolBlockEditStation(ccd);
             }
             return Stations[ccd];
         }

@@ -30,6 +30,7 @@ namespace MachineVisionCGQ
             UiMainForm.Layout(this);
             UiMainForm.LayoutDisplay();
             UiMainForm.LayoutEdit();
+            UiMainForm.LayoutDataView();
             
         }
 

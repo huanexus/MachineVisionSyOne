@@ -96,8 +96,6 @@ namespace Hu.MachineVision.VisionPro
        }
 
 
-
-
        internal void RunOffline()
        {
           // throw new NotImplementedException();

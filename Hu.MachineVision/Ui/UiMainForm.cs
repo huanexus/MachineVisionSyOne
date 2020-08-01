@@ -123,9 +123,19 @@ namespace Hu.MachineVision.Ui
           
            for (int i = 0; i < Project.CcdCount; i++)
            {               
-               var edit = EditStation.GetStation(i);
+               var edit = ToolBlockEditStation.GetStation(i);
                
                edit.AddAuxUi();
+           }
+       }
+
+       public static void LayoutDataView()
+       {
+
+           for (int i = 0; i < Project.CcdCount; i++)
+           {
+               var station = new DataViewStation(i);
+               
            }
        }
 

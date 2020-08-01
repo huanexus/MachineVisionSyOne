@@ -141,6 +141,14 @@ namespace Hu.MachineVision.Database
             return data;
         }
 
+        public static int GetRunStatus(string name)
+        {
+            var db = Connections["Data"];
+            int data = db.ExecuteScalar<int>("select data from RunStatus where name = ?", name);
+
+            return data;
+        }
+
         public static void InitializeDatabaseData()
         {
             var db = Connections["Data"];
