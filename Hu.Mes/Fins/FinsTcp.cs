@@ -24,6 +24,7 @@ namespace Hu.Mes.Fins
         static FinsTcp()
         {
             Servers = new Dictionary<string, OmronPLC>();
+            Ports = new Dictionary<string, int>();
         }
 
         public FinsTcp(string ip = "192.168.250.22", int port = 9600)
@@ -31,9 +32,9 @@ namespace Hu.Mes.Fins
             IP = ip;            
             if(!Servers.ContainsKey(ip))
             {
-                mcOMRON.tcpFINSCommand tcpCommand = ((mcOMRON.tcpFINSCommand)PLC.FinsCommand);
-                tcpCommand.SetTCPParams(System.Net.IPAddress.Parse(ip), Convert.ToInt32(port));
                 OmronPLC plc = new OmronPLC(mcOMRON.TransportType.Tcp);
+                mcOMRON.tcpFINSCommand tcpCommand = ((mcOMRON.tcpFINSCommand)plc.FinsCommand);
+                tcpCommand.SetTCPParams(System.Net.IPAddress.Parse(ip), Convert.ToInt32(port));                
                 plc.Connect();
                 Servers[ip] = plc;
                 Ports[ip] = port;

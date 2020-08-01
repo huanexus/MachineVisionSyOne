@@ -15,11 +15,15 @@ using Hu.MachineVision.Database;
 using Hu.MachineVision.VisionPro;
 using Hu.MachineVision.Helper;
 
+using Hu.Mes.Fins;
+
 namespace MachineVisionCGQ
 {
     public partial class Form1 : Form
-    {      
+    {
+        public long Timestamp { get; set; }
 
+        public FinsTcp MyFinsTcp { get; set; }
         public Form1()
         {
             InitializeComponent();           
@@ -31,6 +35,10 @@ namespace MachineVisionCGQ
             UiMainForm.LayoutDisplay();
             UiMainForm.LayoutEdit();
             UiMainForm.LayoutDataView();
+
+            Timestamp = DateTime.Now.Ticks;
+
+            MyFinsTcp = new FinsTcp();
             
         }
 
@@ -52,6 +60,19 @@ namespace MachineVisionCGQ
                 UiMainForm.LogMessage(kv.Key);
             }
             
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Timestamp = DateTime.Now.Ticks;
+            UiMainForm.LogMessage(Timestamp.ToString());
+            MyFinsTcp.WriteTimestamp(Timestamp);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            long stamp = MyFinsTcp.ReadTimestamp();
+            UiMainForm.LogMessage(stamp.ToString());
         }
     }
 }
