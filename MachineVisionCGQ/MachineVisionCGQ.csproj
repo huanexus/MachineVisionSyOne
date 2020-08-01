@@ -49,6 +49,10 @@
     <Reference Include="Cognex.VisionPro3D.Core, Version=59.2.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505" />
     <Reference Include="Cognex.VisionPro3D.Display.Controls, Version=59.2.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505" />
     <Reference Include="Cognex.VisionPro3D.Graphic, Version=59.2.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505" />
+    <Reference Include="mc.Omron.v1.00, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\mc.Omron.v1.00.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -137,6 +141,10 @@
     <ProjectReference Include="..\Hu.MachineVision\Hu.MachineVision.csproj">
       <Project>{e647e4b4-748a-4478-9726-2085d7bd65f7}</Project>
       <Name>Hu.MachineVision</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Hu.Mes\Hu.Mes.csproj">
+      <Project>{0a3de803-de64-4382-802b-45ff5c8593c0}</Project>
+      <Name>Hu.Mes</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
