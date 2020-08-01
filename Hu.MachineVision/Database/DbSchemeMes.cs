@@ -20,17 +20,19 @@ namespace Hu.MachineVision.Database
 
         public static void Create()
         {
-            Dictionary<string, string>[] Infos = new Dictionary<string, string>[2];
+            Dictionary<string, string>[] Infos = new Dictionary<string, string>[3];
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 3; i++)
             {
                 Infos[i] = new Dictionary<string, string>();
             }
 
-            Infos[0]["a"] = "1";
-            Infos[0]["b"] = "2";
-            Infos[1]["a"] = "3";
-            Infos[1]["b"] = "4";
+            Infos[0]["image1"] = "d:\\image\\a.bmp";
+            Infos[0]["image2"] = "d:\\image\\b.bmp";
+            Infos[1]["x1"] = "3";
+            Infos[1]["y1"] = "4";
+            Infos[2]["x2"] = "5";
+            Infos[2]["y2"] = "6";
 
             int itemCount = Db.ExecuteScalar<int>("select count(*) from CcdMes");
 

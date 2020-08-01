@@ -80,10 +80,24 @@ namespace Hu.MachineVision.Ui
         }
         public void WriteMessage(string message, DateTime datetime)
         {
-            if (Dialog != null && !string.IsNullOrWhiteSpace(message))
+            if(Dialog.InvokeRequired)
             {
-                Dialog.Text = StampMessage(message, datetime) + Environment.NewLine + Dialog.Text;
+                Dialog.Invoke(new Action(() =>
+                    {
+                        if (Dialog != null && !string.IsNullOrWhiteSpace(message))
+                        {
+                            Dialog.Text = StampMessage(message, datetime) + Environment.NewLine + Dialog.Text;
+                        }
+                    }));
             }
+            else
+            {
+                if (Dialog != null && !string.IsNullOrWhiteSpace(message))
+                {
+                    Dialog.Text = StampMessage(message, datetime) + Environment.NewLine + Dialog.Text;
+                }
+            }
+
         }
 
         public void WriteMessage(string message)
