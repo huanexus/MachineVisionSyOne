@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using System.Threading.Tasks.Dataflow;
+
 using Hu.MachineVision;
 using Hu.MachineVision.Config;
 using Hu.MachineVision.Ui;
@@ -16,6 +18,7 @@ using Hu.MachineVision.VisionPro;
 using Hu.MachineVision.Helper;
 
 using Hu.Mes.Fins;
+using Hu.Serial.SerialSy;
 
 namespace MachineVisionCGQ
 {
@@ -24,9 +27,15 @@ namespace MachineVisionCGQ
         public long Timestamp { get; set; }
 
         public FinsTcp MyFinsTcp { get; set; }
+
+        public ActionBlock<string> MessageBlock { get; set; }
+
+        
         public Form1()
         {
-            InitializeComponent();           
+            InitializeComponent();
+            MessageBlock = new ActionBlock<string>(x => UiMainForm.LogMessage(x));
+            SYMVDIO.MessageBuffer.LinkTo(MessageBlock);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -39,6 +48,7 @@ namespace MachineVisionCGQ
             Timestamp = DateTime.Now.Ticks;
 
             MyFinsTcp = new FinsTcp();
+
             
         }
 
@@ -78,6 +88,12 @@ namespace MachineVisionCGQ
         private void button4_Click(object sender, EventArgs e)
         {
             DbHelper.SendData("");
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            SyInfo a = new SyInfo(1, "COM1");
+            SYMVDIO.Connect(a);
         }
     }
 }

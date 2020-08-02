@@ -146,6 +146,10 @@
       <Project>{0a3de803-de64-4382-802b-45ff5c8593c0}</Project>
       <Name>Hu.Mes</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Hu.Serial\Hu.Serial.csproj">
+      <Project>{9ff5b7cb-e271-4b06-baf7-8978672988d4}</Project>
+      <Name>Hu.Serial</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

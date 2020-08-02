@@ -24,16 +24,14 @@ namespace Hu.MachineVision.VisionPro
         public static UiTabControls MyTabs { get { return UiMainForm.MyTabs; } }
         public static Dictionary<string, Panel>[] Panels { get; set; }
         public static DataGridView[] Dgvs { get; set; }
-
         public static StationToolBlockEdit[] EditStations { get; set; }
-
         public static int CcdCount { get { return DbHelper.GetUiParams("CcdCount"); } }
-
+        public static string StationName { get { return "RefValue"; } }
         public static StationViewRefValue[] Stations { get; set; } 
        
 
         public int CcdId { get; set; }
-        public TabPage Tp { get { return MyTabs["RefValue", CcdId]; } }
+        public TabPage Tp { get { return MyTabs[StationName, CcdId]; } }
         public Panel ZoneMain { get { return Panels[CcdId]["Main"]; } }
         public DataGridView Dgv { get { return Dgvs[CcdId]; } }
         public StationToolBlockEdit EditStation { get { return EditStations[CcdId]; } }
@@ -47,7 +45,7 @@ namespace Hu.MachineVision.VisionPro
 
             for (int i = 0; i < CcdCount; i++)
             {
-                var tp = MyTabs["RefValue", i];
+                var tp = MyTabs[StationName, i];
                 Panels[i] = new Dictionary<string, Panel>();
                 Panels[i]["Main"] = new Panel();
                 Panels[i]["Main"].Width = tp.Width - 20;
