@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using System.Threading.Tasks.Dataflow;
-
 using System.IO.Ports;
+
+using System.Threading.Tasks.Dataflow;
 
 namespace Hu.Serial.SerialSy
 {
@@ -105,12 +105,69 @@ namespace Hu.Serial.SerialSy
 
         public bool IsAvail { get; set; }
 
+        public static Dictionary<int, SyInfo> Devices { get; set; }
+
+        public static Dictionary<string, int> SyPorts { get; set; }
+
+        static SyInfo()
+        {
+            Devices = new Dictionary<int, SyInfo>();
+            SyPorts = new Dictionary<string, int>();
+            SyPorts = GetAllPorts();
+        }
+
         public SyInfo(int channel, string portName)
         {
             Channel = channel;
             PortName = portName;
             SlaveIP = 10;
-            IsAvail = false;
+            IsAvail = false;            
+        }
+
+        public static Dictionary<string, int> GetAllPorts()
+        {
+           var portNames = SerialPort.GetPortNames();           
+            Dictionary<string, int> sy = new Dictionary<string,int>();
+            int slaveIP = 10;
+            bool isAvail = false;
+
+            foreach(var portName in portNames)
+            {
+                isAvail = SYMVDIO.CheckPortStatus(portName, ref slaveIP);
+                if(isAvail)
+                {
+                    sy.Add(portName, slaveIP);
+                }
+            }            
+
+            return sy;
+        }
+
+        public static SyInfo GetDevice(int channel)
+        {
+            if(Devices.ContainsKey(channel))
+            {
+                return Devices[channel];
+            }
+
+            return null;
+        }
+
+        public static SyInfo AddDevice(int channel, string portName)
+        {
+            SyInfo device = null;
+            if(!Devices.ContainsKey(channel))
+            {
+                device = new SyInfo(channel, portName);
+                Devices[channel] = device;
+            }
+
+            return device;
+        }
+
+        public SyInfo this[int index]
+        {
+            get { return GetDevice(index); }
         }
 
         public int GetConnectNum()
