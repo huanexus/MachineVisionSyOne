@@ -38,9 +38,11 @@ namespace Hu.MachineVision.Ui
             string[] displayNames = { "Display" };
             string[] displayTexts = { "显示" };
 
-            string[] names = { "Vpp", "Serial", "Parameter" };
-            string[] texts = { "调试画面", "通讯设置", "参数设置" };
+            //string[] names = { "Vpp", "Serial", "Parameter" };
+            //string[] texts = { "调试画面", "通讯设置", "参数设置" };
 
+            string[] names = { "Vpp", "Serial" };
+            string[] texts = { "调试画面", "通讯设置"};
 
             int groupCount = names.Count();
             int ccdCount = Project.CcdCount;
@@ -96,8 +98,11 @@ namespace Hu.MachineVision.Ui
 
         public void AddTabData(Panel panel)
         {
-            string[] names = { "Data", "RawData", "CompValue", "RefValue" };
-            string[] texts = { "结果值", "原始值", "补偿值", "标准值" };
+            //string[] names = { "Data", "RawData", "CompValue", "RefValue" };
+            //string[] texts = { "结果值", "原始值", "补偿值", "标准值" };
+
+            string[] names = { "Data"};
+            string[] texts = { "结果值"};
 
             int groupCount = names.Count();
             int ccdCount = Project.CcdCount;
@@ -121,8 +126,11 @@ namespace Hu.MachineVision.Ui
                 }
             }
 
-            string[] auxNames = { "Config", "Opinion", "Tool" };
-            string[] auxTexts = { "设置", "选项", "工具" };
+            //string[] auxNames = { "Config", "Opinion", "Tool" };
+            //string[] auxTexts = { "设置", "选项", "工具" };
+
+            string[] auxNames = { "Config" };
+            string[] auxTexts = { "设置"};
 
             for (int i = 0; i < auxNames.Count(); i++)
             {

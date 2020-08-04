@@ -6,10 +6,11 @@ using System.Collections;
 using System.Linq;
 
 
-//using System.Threading.Tasks.Dataflow;
+using System.Threading.Tasks.Dataflow;
 
 using System.Threading.Tasks;
 
+using Hu.MachineVision;
 using Hu.MachineVision.Database;
 using Hu.MachineVision.Ui;
 
@@ -23,9 +24,7 @@ namespace Hu.MachineVision.SerialSy
         public int[] Values { get; set; }
         public SyDevice Device { get; set; }
         public int Channel { get; set; }
-
         public int Id { get { return Channel; } }
-
         public System.Timers.Timer ScDiTimer { get; set; }
         public System.Timers.Timer ScDoTimer { get; set; }
         public static int DeviceNum { get; set; }
@@ -40,6 +39,9 @@ namespace Hu.MachineVision.SerialSy
         public int TrigCount { get; set; }
         public Dictionary<string, int> DiPorts { get; set; }
         public Dictionary<string, int> DoPorts { get; set; }
+
+        public int DoFailCount { get; set; }
+        public int DiFailCount { get; set; }
 
         static VirtualIo()
         {
@@ -57,6 +59,8 @@ namespace Hu.MachineVision.SerialSy
             Values = new int[] { 0, 0 };
             TrigCount = 0;
             Channel = channel;
+
+            DoFailCount = 0;
 
             var db = DbScheme.Connections["Main"];
             var diQuery = db.Query<CcdDi>("select * from CcdDi where ccdId = ?", Id);
@@ -80,7 +84,16 @@ namespace Hu.MachineVision.SerialSy
 
             DiChanged += VirtualIo_DiChanged;
             DoChanged += VirtualIo_DoChanged;
+            Grab += VirtualIo_Grab;
             
+        }
+
+        void VirtualIo_Grab(object sender, GrabEventArgs e)
+        {
+            if(RunParams.CcdGrabBlock.ContainsKey(Id))
+            {
+                RunParams.CcdGrabBlock[Id].Post(e.Trig);
+            }
         }
 
         void VirtualIo_DoChanged(object sender, SignalEventArgs e)
@@ -179,12 +192,20 @@ namespace Hu.MachineVision.SerialSy
 
         public bool GetDiStatus()
         {
+            if (DiFailCount > 5)
+            {
+                return false;
+            }
+
+
             ushort inputsta = 0;
             var device = Device;
             bool isAvail = device.DiReadLine(ref inputsta);
+
             if (!isAvail)
             {
                 LogMessage(string.Format("CCD{0}读取DI失败", Id));
+                DiFailCount++;
                 return false;
             }
             Di = (int)inputsta;
@@ -193,12 +214,13 @@ namespace Hu.MachineVision.SerialSy
 
 
         public void StartWatch()
-        {
+        {   
+
             if (Device != null)
             {
                 ScDiTimer = new System.Timers.Timer(100);
                 ScDiTimer.AutoReset = false;
-                ScDiTimer.Elapsed += (s, e) => WatchDi(ScDiTimer);
+                ScDiTimer.Elapsed += (s, e) => WatchDi(ScDiTimer);               
                 ScDiTimer.Start();
             }
         }
@@ -219,13 +241,20 @@ namespace Hu.MachineVision.SerialSy
 
         public bool GetDoStatus()
         {
+            if (DoFailCount > 5)
+            {
+                return false;
+            }
+
             ushort outputsta = 0;
             var device = Device;
 
             bool isAvail = device.DoReadBackLine(ref outputsta);
+
             if (!isAvail)
             {
                 LogMessage(string.Format("CCD{0}读取DO失败", Id));
+                DoFailCount++;
                 return false;
             }
 

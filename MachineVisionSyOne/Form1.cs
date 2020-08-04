@@ -96,5 +96,16 @@ namespace MachineVisionSyOne
 
             UiMainForm.LogMessage("程序已退出!");
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            RunParams.CcdGrabBlock[0].Post(0);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+           // RunParams.CcdOfflineBlock[0].Post(0);
+            RunParams.CcdCheckBlock[0].Post(0);
+        }
     }
 }

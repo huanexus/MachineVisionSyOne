@@ -21,7 +21,7 @@ namespace Hu.MachineVision.VisionPro
 {
     class StationViewCompValue: IDataViewStation
     {
-         public static UiTabControls MyTabs { get { return UiMainForm.MyTabs; } }
+        public static UiTabControls MyTabs { get { return UiMainForm.MyTabs; } }
         public static Dictionary<string, Panel>[] Panels { get; set; }
         public static DataGridView[] Dgvs { get; set; }
 

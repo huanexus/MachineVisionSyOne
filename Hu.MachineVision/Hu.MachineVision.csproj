@@ -41,6 +41,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\Cognex\VisionPro\ReferencedAssemblies\Cognex.VisionPro.Display.Controls.dll</HintPath>
     </Reference>
+    <Reference Include="Cognex.VisionPro.FGGigE, Version=59.2.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Cognex\VisionPro\ReferencedAssemblies\Cognex.VisionPro.FGGigE.dll</HintPath>
+    </Reference>
     <Reference Include="Cognex.VisionPro.ImageProcessing, Version=59.2.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\Cognex\VisionPro\ReferencedAssemblies\Cognex.VisionPro.ImageProcessing.dll</HintPath>
@@ -105,6 +109,7 @@
     <Compile Include="Database\UiParams.cs" />
     <Compile Include="Helper\VppHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RunParams.cs" />
     <Compile Include="SerialSy\ISerialDeviceInfo.cs" />
     <Compile Include="SerialSy\SignalEventArgs.cs" />
     <Compile Include="SerialSy\SyDevice.cs" />
@@ -115,6 +120,7 @@
     <Compile Include="SerialSy\SYMVDIOHelper.cs" />
     <Compile Include="SerialSy\VirtualIo.cs" />
     <Compile Include="SerialSy\VirtualIoUi.cs" />
+    <Compile Include="StationViews.cs" />
     <Compile Include="Ui\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -125,6 +131,7 @@
     <Compile Include="Ui\UiLogDialog.cs" />
     <Compile Include="Ui\UiMainForm.cs" />
     <Compile Include="Ui\UiTabControls.cs" />
+    <Compile Include="CommonHelper.cs" />
     <Compile Include="VisionPro\CcdTerminal.cs" />
     <Compile Include="VisionPro\StationViewCompValue.cs" />
     <Compile Include="VisionPro\StationViewData.cs" />
@@ -133,6 +140,7 @@
     <Compile Include="VisionPro\StationViewRefValue.cs" />
     <Compile Include="VisionPro\StationToolBlockEdit.cs" />
     <Compile Include="VisionPro\StationToolBlock.cs" />
+    <Compile Include="VisionPro\VisionAcqFifo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
