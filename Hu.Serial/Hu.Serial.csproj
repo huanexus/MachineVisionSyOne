@@ -63,6 +63,7 @@
     <Compile Include="ISerialDeviceInfo.cs" />
     <Compile Include="SerialSy\SignalEventArgs.cs" />
     <Compile Include="SerialSy\SyDevice.cs" />
+    <Compile Include="SerialSy\SyHelper.cs" />
     <Compile Include="SerialSy\SYMVDIOHeader32.cs" />
     <Compile Include="SerialSy\SYMVDIOHelper.cs" />
     <Compile Include="SerialSy\SYMVDIO.cs" />

@@ -94,8 +94,8 @@ namespace Hu.Serial.SerialSy
 
             Io.DiChanged += (s, e) => Di = Io.Di;
             Io.DoChanged += (s, e) => Do = Io.Do;
-            DiCount = Io.DiPortCount;
-            DoCount = Io.DoPortCount;
+            DiCount = Sy.DiPortCount;
+            DoCount = Sy.DoPortCount;
             UiPanel = new Panel();
             UiPanel.Width = 640;
             UiPanel.Height = 360;

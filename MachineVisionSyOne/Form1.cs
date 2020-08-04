@@ -49,6 +49,9 @@ namespace MachineVisionSyOne
             UiMainForm.LayoutEdit();
             UiMainForm.LayoutDataView();
 
+            SyHelper.AddUi(0);
+            SyHelper.AddUi(1);
+
             Timestamp = DateTime.Now.Ticks;
 
 
