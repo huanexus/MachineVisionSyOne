@@ -72,8 +72,8 @@ namespace Hu.MachineVision.Database
            db.CreateTable<CcdDo>();
            db.CreateTable<CcdSerial>();
 
-           db.CreateIndex("CcdDi", new string[] { "ccdId", "name", "port" });
-           db.CreateIndex("CcdDo", new string[] { "ccdId", "name", "port" });
+           db.CreateIndex("CcdDi", new string[] { "ccdId", "name", "port" }, true);
+           db.CreateIndex("CcdDo", new string[] { "ccdId", "name", "port" }, true);
         }
 
         public static void CreateDatabaseData()

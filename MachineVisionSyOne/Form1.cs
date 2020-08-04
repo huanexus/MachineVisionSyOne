@@ -52,32 +52,8 @@ namespace MachineVisionSyOne
             SyHelper.AddUi(0);
             SyHelper.AddUi(1);
 
-            Timestamp = DateTime.Now.Ticks;
-
-
-            
+            Timestamp = DateTime.Now.Ticks;            
         }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            var infos = UiMainForm.MyZoneInfo;
-            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            sw.Start();
-            
-            infos[0].Show(false);            
-            infos[1].Show(true);
-            sw.Stop();
-
-            UiMainForm.LogMessage(sw.ElapsedMilliseconds.ToString());
-            var a = VppHelper.FindVpps(0, 0);  
-
-            foreach(var kv in a)
-            {
-                UiMainForm.LogMessage(kv.Key);
-            }
-            
-        }
-
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -96,16 +72,6 @@ namespace MachineVisionSyOne
 
             UiMainForm.LogMessage("程序已退出!");
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            RunParams.CcdGrabBlock[0].Post(0);
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-           // RunParams.CcdOfflineBlock[0].Post(0);
-            RunParams.CcdCheckBlock[0].Post(0);
-        }
+         
     }
 }

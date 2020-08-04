@@ -18,7 +18,7 @@ namespace Hu.MachineVision.Database
         [NotNull]
         public string Name { get; set; }
 
-        [Column("Port")]
+        [Column("port")]
         [NotNull]
         public int Port { get; set; }
     }
@@ -33,7 +33,7 @@ namespace Hu.MachineVision.Database
         [NotNull]
         public string Name { get; set; }
 
-        [Column("Port")]
+        [Column("port")]
         [NotNull]
         public int Port { get; set; }
     }

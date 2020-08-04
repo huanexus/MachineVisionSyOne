@@ -129,18 +129,18 @@ namespace Hu.MachineVision.Ui
             //string[] auxNames = { "Config", "Opinion", "Tool" };
             //string[] auxTexts = { "设置", "选项", "工具" };
 
-            string[] auxNames = { "Config" };
-            string[] auxTexts = { "设置"};
+            //string[] auxNames = { "Config" };
+            //string[] auxTexts = { "设置"};
 
-            for (int i = 0; i < auxNames.Count(); i++)
-            {
-                TabPage tp = new TabPage();
-                tp.BackColor = Color.White;
-                Names[auxNames[i]] = "Data";
-                tp.Name = string.Format("{0}", auxNames[i]);
-                tp.Text = string.Format("{0}", auxTexts[i]);
-                tab.TabPages.Add(tp);
-            }
+            //for (int i = 0; i < auxNames.Count(); i++)
+            //{
+            //    TabPage tp = new TabPage();
+            //    tp.BackColor = Color.White;
+            //    Names[auxNames[i]] = "Data";
+            //    tp.Name = string.Format("{0}", auxNames[i]);
+            //    tp.Text = string.Format("{0}", auxTexts[i]);
+            //    tab.TabPages.Add(tp);
+            //}
 
             Tabs["Data"] = tab;
             Panels["Data"] = panel;
