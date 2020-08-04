@@ -67,6 +67,13 @@ namespace Hu.MachineVision.Database
            db.CreateIndex("CcdTerminal", new string[] { "ccdId", "partId" }, true);           
            db.CreateTable<UiParams>();
            db.CreateTable<CcdVpp>();
+
+           db.CreateTable<CcdDi>();
+           db.CreateTable<CcdDo>();
+           db.CreateTable<CcdSerial>();
+
+           db.CreateIndex("CcdDi", new string[] { "ccdId", "name", "port" });
+           db.CreateIndex("CcdDo", new string[] { "ccdId", "name", "port" });
         }
 
         public static void CreateDatabaseData()
@@ -128,6 +135,16 @@ namespace Hu.MachineVision.Database
                 string partPattern = "[A-Za-z]*";
                 var patternVpp = new CcdVpp() { CcdId = i, VppHome = vppHome, NamePattern = namePattern, PartPattern = partPattern };
                 db.InsertOrIgnore(patternVpp);
+            }
+
+            for(int i = 0; i < ccdCount; i++)
+            {
+                db.InsertOrIgnore(new CcdDi() { CcdId = i, Name = "Trig", Port = 0 });
+                db.InsertOrIgnore(new CcdDi() { CcdId = i, Name = "Reset", Port = 4 });
+                db.InsertOrIgnore(new CcdDo() { CcdId = i, Name = "Done", Port = 0 });
+                db.InsertOrIgnore(new CcdDo() { CcdId = i, Name = "Ok", Port = 1 });
+                db.InsertOrIgnore(new CcdDo() { CcdId = i, Name = "Ng", Port = 1 });
+                db.InsertOrIgnore(new CcdSerial() { CcdId = i, ComPort = i + 1 });
             }
         }
 

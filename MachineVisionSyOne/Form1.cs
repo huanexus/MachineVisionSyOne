@@ -76,12 +76,6 @@ namespace MachineVisionSyOne
         }
 
 
-        private void button5_Click(object sender, EventArgs e)
-        {
-            SyInfo a = new SyInfo(1, "COM1");
-            SYMVDIO.Connect(a);
-        }
-
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             CogFrameGrabberGigEs cameras = new CogFrameGrabberGigEs();

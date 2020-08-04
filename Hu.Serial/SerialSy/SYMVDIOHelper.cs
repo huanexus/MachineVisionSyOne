@@ -44,10 +44,12 @@ namespace Hu.Serial.SerialSy
             return result;
         }
 
-        public static bool Connect(SyInfo sy)
+        public static bool Connect(this SyDevice device)
         {
             bool result = true;
             bool isAvail = false;
+
+            SyInfo sy = device.Device;
 
             int connectNum = sy.GetConnectNum();
             string portName = sy.GetPortName();
@@ -77,6 +79,11 @@ namespace Hu.Serial.SerialSy
             bool isAvail = SY_MV_DIO_Disconnect(connectNum);
             LogStatusMessage(string.Format("断开连接{0}", connectNum), isAvail);
             return isAvail;            
+        }
+
+        public static bool Disconnect(this SyDevice device)
+        {
+            return Disconnect(device.ConnectNum);
         }
 
 

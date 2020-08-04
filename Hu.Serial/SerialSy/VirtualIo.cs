@@ -5,14 +5,15 @@ using System.Collections;
 
 using System.Linq;
 
-using Nett;
 
 //using System.Threading.Tasks.Dataflow;
 
 using System.Threading.Tasks;
 
+using Hu.MachineVision.Database;
+using Hu.MachineVision.Ui;
 
-namespace Vision.SerialSy
+namespace Hu.Serial.SerialSy
 {
 
     public partial class VirtualIo
@@ -22,10 +23,10 @@ namespace Vision.SerialSy
         public int[] Values { get; set; }
         public BitArray[] Bits { get; set; }
         public BitArray[] oldBits { get; set; }
-        public SerialSy Sy { get { return SerialSy.GetDevice(Channel); } }
+        public SyDevice Device { get; set; }
         public int Channel { get; set; }
 
-        public int Id { get { return CcdStations[Channel]; } set { CcdStations[Channel] = value; } }
+        public int Id { get { return Channel; } }
 
         public int DiPortCount { get; set; }
         public int DoPortCount { get; set; }
@@ -34,34 +35,22 @@ namespace Vision.SerialSy
         public static int DeviceNum { get; set; }
         public static List<VirtualIo> Devices { get; set; }
 
-        public event EventHandler IoReset;
         public event EventHandler<SignalEventArgs> DiChanged;
         public event EventHandler<SignalEventArgs> DoChanged;
-
-        public event EventHandler<TrigUpEventArgs> DiTrigUp;
-       
 
         public int[] mDiPorts { get; set; }
         public int TrigCount { get; set; }
         public Dictionary<string, int> DiPorts { get; set; }
         public Dictionary<string, int> DoPorts { get; set; }
-        public static Dictionary<int, int> CcdStations { get; set; }       
 
-        public bool IsDoMask { get; set; }
-        public bool IsDummyIo { get; set; }
-        public int DummyDi { get; set; }
-        public SchemeIo Scheme { get; set; }
         static VirtualIo()
         {
-            DeviceNum = 2;           
-            CcdStations = new Dictionary<int, int>();
+            DeviceNum = DbHelper.GetUiParams("CcdCount");
             Devices = new List<VirtualIo>();
             for (int i = 0; i < DeviceNum; i++)
             {
                 Devices.Add(new VirtualIo(i));
-                CcdStations[i] = i;
             }
-
         }
         private VirtualIo(int channel)
         {
@@ -72,19 +61,26 @@ namespace Vision.SerialSy
             oldBits = new BitArray[] { new BitArray(8), new BitArray(8) };
             TrigCount = 0;
             Channel = channel;
-            IsDummyIo = true;
 
-            Scheme = SchemeIo.Schemes[channel];
+            var db = DbScheme.Connections["Main"];
+            var diQuery = db.Query<CcdDi>("select * from CcdDi where ccdId = ?", Id);
+            var doQuery = db.Query<CcdDo>("select * from CcdDo where ccdId = ?", Id);
+
+            DiPorts = new Dictionary<string, int>();
+            foreach (var qurey in diQuery)
+            {
+                DiPorts[qurey.Name] = qurey.Port;
+            }
+
             DoPorts = new Dictionary<string, int>();
-            DoPorts["Done"] = Scheme.Sdo.Port["Done"];
-            DoPorts["Ok"] = Scheme.Sdo.Port["Ok"];
-            DoPorts["Ng"] = Scheme.Sdo.Port["Ng"];
-            DiPortCount = 6;
-            DoPortCount = 6;
-            IsDoMask = false;
-           
-           // Scheme.Sdi.Io["Reset"].TrigUp.Subscribe(x => ResetAll());
-            Scheme.Sdo.SetDevice(Sy);
+            foreach (var qurey in doQuery)
+            {
+                DoPorts[qurey.Name] = qurey.Port;
+            }
+
+            int comPort = db.ExecuteScalar<int>("select comPort from CcdSerial where ccdId = ?", Id);
+            string portName = "COM" + comPort;
+            Device = new SyDevice(Id, portName);
         }
 
         public static VirtualIo GetDevice(int channel)
@@ -102,27 +98,13 @@ namespace Vision.SerialSy
             return io;
         }
 
-        public static int GetChannel(int id)
-        {
-            int channel = -1;
-            foreach (var device in Devices)
-            {
-                if (device.Id == id)
-                {
-                    channel = device.Channel;
-                    break;
-                }
-            }
-
-            return channel;
-        }
 
         public static VirtualIo GetDevice(string portName)
         {
             VirtualIo io = null;
             foreach (var device in Devices)
             {
-                var sy = SerialSy.GetDevice(device.Channel);
+                var sy = device.Device;
                 if (sy != null)
                 {
                     if (sy.PortName == portName)
@@ -146,8 +128,6 @@ namespace Vision.SerialSy
                 {
                     int oldValue = Values[0];
                     Values[0] = value;
-                    Scheme.Sdi.IoBlock.Post(value);
-                    
 
                     if (DiChanged != null)
                     {
@@ -167,38 +147,32 @@ namespace Vision.SerialSy
                     int oldValue = Values[1];
                     Values[1] = value;
 
-                    Scheme.Sdo.IoBlock.Post(value);
                     if (DoChanged != null)
                     {
                         DoChanged(this, new SignalEventArgs(value, oldValue));
                     }
                 }
             }
-        }       
+        }
 
         public bool GetDiStatus()
         {
             ushort inputsta = 0;
-            if (SerialSy.SyPortsStatus[Sy.Channel])
+            var device = Device;
+            bool isAvail = device.DiReadLine(ref inputsta);
+            if (!isAvail)
             {
-                bool isAvail = Sy.DiReadLine(ref inputsta);
-                if (!isAvail)
-                {
-                    LogMessage(string.Format("CCD{0}读取DI失败", Id));
-                    return false;
-                }
-                Di = (int)inputsta;
-                return true;
+                LogMessage(string.Format("CCD{0}读取DI失败", Id));
+                return false;
             }
-
-            return false;
-
+            Di = (int)inputsta;
+            return true;
         }
 
 
         public void StartWatch()
         {
-            if (Sy != null)
+            if (Device != null)
             {
                 ScDiTimer = new System.Timers.Timer(100);
                 ScDiTimer.AutoReset = false;
@@ -224,36 +198,35 @@ namespace Vision.SerialSy
         public bool GetDoStatus()
         {
             ushort outputsta = 0;
-            if (SerialSy.SyPortsStatus[Sy.Channel])
+            var device = Device;
+
+            bool isAvail = device.DoReadBackLine(ref outputsta);
+            if (!isAvail)
             {
-                bool isAvail = Sy.DoReadBackLine(ref outputsta);
-                if (!isAvail)
-                {
-                    LogMessage(string.Format("CCD{0}读取DO失败", Id));
-                    return false;
-                }
-                Do = (int)outputsta;
-                return true;
+                LogMessage(string.Format("CCD{0}读取DO失败", Id));
+                return false;
             }
-            return false;
+
+            Do = (int)outputsta;
+            return true;
         }
 
         private void LogMessage(string message)
         {
-            MessageLogger.LogMessage(message);
+         UiMainForm.LogMessage(message);
         }
 
         public int SetPort(string portName, string message = "")
         {
-            int port = Scheme.Sdo.Port[portName];
-            Scheme.Sdo.Io[portName].SetPort();
+            int port = DoPorts[portName];
+            Device.DoWritePort(port, true);
             return SetPort(port, message);
         }
 
         public int ResetPort(string portName, string message = "")
         {
-            int port = Scheme.Sdo.Port[portName];
-            Scheme.Sdo.Io[portName].ResetPort();
+            int port = DoPorts[portName];
+            Device.DoWritePort(port, false);
             return ResetPort(port, message);
         }
 
@@ -281,7 +254,7 @@ namespace Vision.SerialSy
         public void SetOk()
         {
             ResetPort("Ng");
-            SetPort("Ok");          
+            SetPort("Ok");
         }
 
         public void SetNg()
@@ -294,7 +267,7 @@ namespace Vision.SerialSy
         {
             SetPort("Done");
             LogMessage(string.Format("反馈拍照完成"));
-          //  Task.Delay(300).ContinueWith(x => ResetPort("Done"));
+            //  Task.Delay(300).ContinueWith(x => ResetPort("Done"));
         }
 
         public void ResetDone()
@@ -308,7 +281,6 @@ namespace Vision.SerialSy
             ResetPort("Ok");
             ResetPort("Ng");
             ResetPort("Done");
-
         }
     }
 }

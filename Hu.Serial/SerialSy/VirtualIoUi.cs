@@ -12,7 +12,7 @@ using System.Drawing;
 using System.Threading.Tasks.Dataflow;
 
 
-namespace Vision.SerialSy
+namespace Hu.Serial.SerialSy
 {
     public class VirtualIoUi
     {
@@ -26,7 +26,8 @@ namespace Vision.SerialSy
         public int Channel { get; set; }
         public int CcdId { get; set; }
         public VirtualIo Io { get; set; }
-        public SerialSy Sy { get { return SerialSy.GetDevice(Channel); } }
+
+        public SyDevice Sy { get { return Io.Device; } }
 
         private GroupBox gboxMain = new GroupBox();
         private GroupBox gboxDi = new GroupBox();
@@ -172,16 +173,16 @@ namespace Vision.SerialSy
             Io.ResetPort(DoPort);
             if(Sy != null)
             {
-                Sy.WritePort(DoPort, false);
+                Sy.DoWritePort(DoPort, false);
             }
         }
 
         private void SetOn()
         {
             Io.SetPort(DoPort);
-            if(Io.Sy != null)
+            if(Sy != null)
             {
-                Sy.WritePort(DoPort, true);
+                Sy.DoWritePort(DoPort, true);
             }
         }
 
