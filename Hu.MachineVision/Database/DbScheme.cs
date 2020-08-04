@@ -71,9 +71,11 @@ namespace Hu.MachineVision.Database
            db.CreateTable<CcdDi>();
            db.CreateTable<CcdDo>();
            db.CreateTable<CcdSerial>();
+           db.CreateTable<CcdParams>();
 
            db.CreateIndex("CcdDi", new string[] { "ccdId", "name", "port" }, true);
            db.CreateIndex("CcdDo", new string[] { "ccdId", "name", "port" }, true);
+           db.CreateIndex("CcdParams", new string[] { "ccdId", "brandId", "paramId", "name" }, true);
         }
 
         public static void CreateDatabaseData()
@@ -146,6 +148,22 @@ namespace Hu.MachineVision.Database
                 db.InsertOrIgnore(new CcdDo() { CcdId = i, Name = "Ng", Port = 2 });
                 db.InsertOrIgnore(new CcdSerial() { CcdId = i, ComPort = i + 1 });
             }
+
+            for(int i = 0; i < ccdCount; i++)
+            {
+                for(int j = 0; j < brandCount; j++)
+                {
+                    db.InsertOrIgnore(new CcdParams() { CcdId = i, BrandId = j, ParamId = 0, Name = "Exposure", Data = 35 });
+                }
+            }
+        }
+
+        public static double GetCcdParams(int ccdId, int brandId, int paramId, string name)
+        {
+            var db = Connections["Main"];
+            string sql = "select data from CcdParams where ccdId = ? and brandId = ? and paramId = ? and name = ?";
+            double data = db.ExecuteScalar<double>(sql, ccdId, brandId, paramId, name);
+            return data;
         }
 
         public static int GetUiParams(string name)
