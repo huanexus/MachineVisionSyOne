@@ -143,7 +143,7 @@ namespace Hu.MachineVision.VisionPro
                for (int i = 0; i < imageCount; i++)
                {
                    CogImage8Grey inputImage = myCogIPOneImageTools[i].OutputImage as CogImage8Grey;
-                   CcdTerminalIn vtIn = new CcdTerminalIn(inputImage, i);
+                   CcdTerminalIn vtIn = new CcdTerminalIn(CcdId, inputImage, i);
                    VtInBlock.Post(vtIn);
                }
 
@@ -158,7 +158,7 @@ namespace Hu.MachineVision.VisionPro
                {
                    Bitmap bmpFile = new Bitmap(imageFile);
                    CogImage8Grey inputImage = new CogImage8Grey(bmpFile);
-                   CcdTerminalIn vtIn = new CcdTerminalIn(inputImage, i);
+                   CcdTerminalIn vtIn = new CcdTerminalIn(CcdId, inputImage, i);
                    VtInBlock.Post(vtIn);
                }
            }
@@ -197,7 +197,7 @@ namespace Hu.MachineVision.VisionPro
                }
 
                AcqFifoTool.Aquire(exposure);
-               vtIn = new CcdTerminalIn(AcqFifoTool.MyImage, imageIndex);
+               vtIn = new CcdTerminalIn(CcdId, AcqFifoTool.MyImage, imageIndex);
            }
 
            return vtIn;           

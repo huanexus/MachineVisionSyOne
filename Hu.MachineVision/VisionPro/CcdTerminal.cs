@@ -10,21 +10,24 @@ using Cognex.VisionPro.ImageProcessing;
 
 namespace Hu.MachineVision.VisionPro
 {
-   public class CcdTerminalIn
+    public class CcdTerminalIn
     {
+        public int CcdId { get; set; }
         public string Brand { get; set; }
         public int ImageIndex { get; set; }
         public ICogImage InputImage { get; set; }
 
-        public CcdTerminalIn(ICogImage image, int index = 0)
+        public CcdTerminalIn(int ccdId, ICogImage image, int index = 0)
         {
+            CcdId = ccdId;
             InputImage = image;
             ImageIndex = index;
-           // Brand = VisionConfig.Brand;
+            // Brand = VisionConfig.Brand;
         }
 
-        public CcdTerminalIn(ICogImage image, string brand, int index = 0)
+        public CcdTerminalIn(int ccdId, ICogImage image, string brand, int index = 0)
         {
+            CcdId = ccdId;
             InputImage = image;
             Brand = brand;
             ImageIndex = index;
@@ -40,6 +43,8 @@ namespace Hu.MachineVision.VisionPro
             toolBlock.Inputs["Brand"].Value = brand;
             toolBlock.Inputs["iAcquirePositionIndex"].Value = index;
             toolBlock.Run();
-        }
+
+            RunParams.CcdCheckBlock[CcdId].Post(0);
+        }       
     }
 }
