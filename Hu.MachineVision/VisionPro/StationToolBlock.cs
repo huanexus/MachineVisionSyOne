@@ -24,6 +24,8 @@ namespace Hu.MachineVision.VisionPro
    public class StationToolBlock
     {
        public int CcdId { get; set; }
+
+       public int BrandId { get; set; }
        public int OfflineImageCycle { get; set; }
        public string VppFileName { get; set; }
        public CogToolBlock MyCogToolBlock { get; set; }
@@ -38,6 +40,7 @@ namespace Hu.MachineVision.VisionPro
            OfflineImageCycle = 1;
            var db = DbScheme.GetConnection("Data");
            int brandId = db.ExecuteScalar<int>("select data from RunStatus where name = ?", "BrandId");
+           BrandId = brandId;
            VppFileName = Helper.VppHelper.FindVpps(CcdId, brandId)[""];          
            LoadVpp();
            VtInBlock = new ActionBlock<CcdTerminalIn>(x => x.RunToolBlock(MyCogToolBlock));
@@ -175,7 +178,7 @@ namespace Hu.MachineVision.VisionPro
                    vIo.ResetPort(i);
                }
            }
-           double exposure = 35;
+           double exposure = DbScheme.GetCcdParams(CcdId, BrandId, x, "Exposure");
            CcdTerminalIn vtIn = GrabImage(imageIndex, exposure);
            VtInBlock.Post(vtIn);
            

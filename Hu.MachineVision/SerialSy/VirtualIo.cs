@@ -40,6 +40,8 @@ namespace Hu.MachineVision.SerialSy
         public Dictionary<string, int> DiPorts { get; set; }
         public Dictionary<string, int> DoPorts { get; set; }
 
+        public const int MaxFailCount = 3;
+
         public int DoFailCount { get; set; }
         public int DiFailCount { get; set; }
 
@@ -192,11 +194,10 @@ namespace Hu.MachineVision.SerialSy
 
         public bool GetDiStatus()
         {
-            if (DiFailCount > 5)
+            if (DiFailCount > MaxFailCount)
             {
                 return false;
             }
-
 
             ushort inputsta = 0;
             var device = Device;
@@ -241,7 +242,7 @@ namespace Hu.MachineVision.SerialSy
 
         public bool GetDoStatus()
         {
-            if (DoFailCount > 5)
+            if (DoFailCount > MaxFailCount)
             {
                 return false;
             }
