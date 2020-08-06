@@ -58,6 +58,7 @@ namespace Hu.MachineVision.Ui
            Project = new ProjectCcd(ccdCount, brandCount, partCounts);
            Panels = new Dictionary<string, Panel>();
            WorkAreaPanel = new Panel();
+         
        }
        public static void Layout(Form mainForm)
        {

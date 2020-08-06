@@ -132,6 +132,13 @@
     <Compile Include="Ui\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ui\Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\UiMainMenu.cs" />
     <Compile Include="Ui\UiZoneInfo.cs" />
     <Compile Include="Ui\UiLogDialog.cs" />
     <Compile Include="Ui\UiMainForm.cs" />
@@ -154,6 +161,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Ui\About.resx">
       <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

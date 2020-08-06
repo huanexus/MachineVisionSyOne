@@ -104,6 +104,7 @@ namespace Hu.MachineVision.Database
             db.InsertOrIgnore(new UiParams() { Name = "BrandCount", Data = 1 });
             db.InsertOrIgnore(new UiParams() { Name = "PartCountCcd1", Data = 1 });
             db.InsertOrIgnore(new UiParams() { Name = "PartCountCcd2", Data = 1 });
+            db.InsertOrIgnore(new UiParams() { Name = "RunMode", Data = 0 });
 
             db.InsertOrIgnore(new UiGlossary() { Name = "k", TextEn = "K", TextCn = "补偿系数" });
             db.InsertOrIgnore(new UiGlossary() {Name = "b", TextEn = "B", TextCn = "补偿常数" });
@@ -111,9 +112,7 @@ namespace Hu.MachineVision.Database
             db.InsertOrIgnore(new UiGlossary() { Name = "r1", TextEn = "R1", TextCn = "下限" });
             db.InsertOrIgnore(new UiGlossary() { Name = "r2", TextEn = "R2", TextCn = "上限" });
             db.InsertOrIgnore(new UiGlossary() { Name = "Data", TextEn = "Data", TextCn = "测量值" });
-            db.InsertOrIgnore(new UiGlossary() { Name = "RawData", TextEn = "RawData", TextCn = "原始值" });
-
-           
+            db.InsertOrIgnore(new UiGlossary() { Name = "RawData", TextEn = "RawData", TextCn = "原始值" });           
 
             string[] namesCn = new string[] { "针检1", "针检2"};
             string[] namesEn = new string[] { "Ccd1", "Ccd2"};
@@ -243,6 +242,9 @@ namespace Hu.MachineVision.Database
         {
             var db = Connections["Data"];
             db.InsertOrIgnore(new RunStatus() { Name = "BrandId", Data = 0 });
+            db.InsertOrIgnore(new RunStatus() { Name = "RunMode", Data = 0 });
+            db.InsertOrIgnore(new RunStatus() { Name = "IsLogin", Data = 0 });
+
 
             int ccdCount = GetUiParams("CcdCount");
             int brandCount = GetUiParams("BrandCount");

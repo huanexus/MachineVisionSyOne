@@ -52,7 +52,9 @@ namespace MachineVisionSyOne
             SyHelper.AddUi(0);
             SyHelper.AddUi(1);
 
-            Timestamp = DateTime.Now.Ticks;            
+            Timestamp = DateTime.Now.Ticks;
+
+            this.LayoutMenuZone();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)

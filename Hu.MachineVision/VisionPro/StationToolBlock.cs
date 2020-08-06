@@ -197,6 +197,9 @@ namespace Hu.MachineVision.VisionPro
                UiMainForm.LogMessage(string.Format("Ccd{0}输出NG信号", CcdId));
            }
 
+           ZoneInfo zinfo = UiZoneInfo.Infos[CcdId];
+           zinfo.Show(result);
+
            UiMainForm.LogMessage(string.Format("Ccd{0}运行结束", CcdId));
 
            return result;
