@@ -45,11 +45,23 @@ namespace Hu.MachineVision.VisionPro
            LoadVpp();
            VtInBlock = new ActionBlock<CcdTerminalIn>(x => x.RunToolBlock(MyCogToolBlock));
 
-           if(!RunParams.CcdGrabBlock.ContainsKey(CcdId))
+           if (!RunParams.CcdGrabBlock.ContainsKey(CcdId))
            {
-               RunParams.CcdGrabBlock[CcdId] = new ActionBlock<int>(x => OnGrabImage(x));
+               RunParams.CcdGrabBlock[CcdId] = new ActionBlock<int>(x => OnGrabImage(x));              
+           }
+
+           if (!RunParams.CcdOfflineBlock.ContainsKey(CcdId))
+           {               
                RunParams.CcdOfflineBlock[CcdId] = new ActionBlock<int>(x => RunOffline(x));
+           }
+
+           if (!RunParams.CcdCheckBlock.ContainsKey(CcdId))
+           {
                RunParams.CcdCheckBlock[CcdId] = new ActionBlock<int>(x => CheckResult(x));
+           }
+
+           if (!RunParams.CcdDisplayBlock.ContainsKey(CcdId))
+           {
                RunParams.CcdDisplayBlock[CcdId] = new ActionBlock<int>(x => DisplayShow(x));
            }
        }
@@ -72,7 +84,13 @@ namespace Hu.MachineVision.VisionPro
            FillRawDataTable(tblRawData, row, column);
 
            DataTable tblData = CreateDataTable(row, column);
-           FillDataTable(tblData, row, column);           
+           FillDataTable(tblData, row, column);
+
+           DataTable tblCompValue = CreateDataTable(row, column);
+           FillCompValue(tblCompValue, row, column);
+
+           DataTable tblRefValue = CreateDataTable(row, column);
+           FillRefValue(tblRefValue, row, column);
        }
 
        private bool FillDataTable(DataTable tbl, int row, int column)
@@ -93,9 +111,18 @@ namespace Hu.MachineVision.VisionPro
 
            double ErrorValue = -1000000.0;
 
+           string r1Text = db.ExecuteScalar<string>("select textCn from UiGlossary where name = ?", "r1");
+           string r2Text = db.ExecuteScalar<string>("select textCn from UiGlossary where name = ?", "r2");
+           string dataCn = db.ExecuteScalar<string>("select textCn from UiGlossary where name = ?",  "Data");
+
+
+
            for (int i = 0; i < row; i++)
            {
                double[] rowData = (MyCogToolBlock.Outputs[string.Format("strRow{0}", i + 1)].Value as string).Split(',').Select(x => double.Parse(x)).ToArray();
+
+               string viewRowLabel = db.ExecuteScalar<string>("select textCn from ViewScheme where ccdId = ? and brandId = ? and viewId = ? and recordId = ?", CcdId, BrandId, 0, i);
+
                if(!bSuccess)
                {
                    for(int ic = 0; ic < rowData.Length; ic++)
@@ -119,6 +146,11 @@ namespace Hu.MachineVision.VisionPro
                    r2Row[j + columnP1] = qurey[j].R2;
                }
 
+               labelRow[columnP1 - 1] = viewRowLabel;
+ 
+               r1Row[columnP1 - 1] = r1Text;
+               r2Row[columnP1 - 1] = r2Text;
+
                tbl.Rows.Add(labelRow);
                tbl.Rows.Add(r2Row);
                tbl.Rows.Add(r1Row);
@@ -128,6 +160,9 @@ namespace Hu.MachineVision.VisionPro
                {
                    dataRow[j + columnP1] = rowData[j];
                }
+
+
+               dataRow[columnP1 - 1] = dataCn;
 
                tbl.Rows.Add(dataRow);
            }
@@ -168,14 +203,19 @@ namespace Hu.MachineVision.VisionPro
 
        }
 
-       private void FillRawDataTable(DataTable tbl, int row, int column)
+       private void FillCompValue(DataTable tbl, int row, int column)
        {
           int columnP1 = 1;
           var db = DbScheme.Connections["Main"];
+          string kText = db.ExecuteScalar<string>("select textCn from UiGlossary where name = ?", "k");
+          string bText = db.ExecuteScalar<string>("select textCn from UiGlossary where name = ?", "b");
+
           for(int i = 0; i < row; i++)
           {
-              double[] rowData = (MyCogToolBlock.Outputs[string.Format("strRow{0}", i + 1)].Value as string).Split(',').Select(x => double.Parse(x)).ToArray();
+              string viewRowLabel = db.ExecuteScalar<string>("select textCn from ViewScheme where ccdId = ? and brandId = ? and viewId = ? and recordId = ?", CcdId, BrandId, 0, i);
               DataRow labelRow = tbl.NewRow();
+              DataRow kRow = tbl.NewRow();
+              DataRow bRow = tbl.NewRow();
               string sql = "select * from CcdCompValue where ccdId = ? and brandId = ? and item between ? and ? order by item";
 
               int itemStart = i * column;
@@ -186,21 +226,19 @@ namespace Hu.MachineVision.VisionPro
               for (int j = 0; j < column; j++)
               {
                  labelRow[j + columnP1] = qurey[j].Label;
-              }              
-
-
-              tbl.Rows.Add(labelRow);
-
-              DataRow dataRow = tbl.NewRow();
-              for(int j = 0; j < column; j++)
-              {
-                  dataRow[j + columnP1] = rowData[j];
+                 kRow[j + columnP1] = qurey[j].K;
+                 bRow[j + columnP1] = qurey[j].B;
               }
 
-              tbl.Rows.Add(dataRow);
+              labelRow[columnP1 - 1] = viewRowLabel;
+              kRow[columnP1 - 1] = kText;
+              bRow[columnP1 - 1] = bText;
+              tbl.Rows.Add(labelRow);
+              tbl.Rows.Add(kRow);
+              tbl.Rows.Add(bRow);
           }
 
-          var dgv = StationViews.GetDgv("RawData", CcdId);
+          var dgv = StationViews.GetDgv("CompValue", CcdId);
           if (dgv.InvokeRequired)
           {
               dgv.Invoke(new Action(() =>
@@ -214,6 +252,123 @@ namespace Hu.MachineVision.VisionPro
               dgv.DataSource = tbl;
               dgv.DgvLayout();
           }
+           
+       }
+
+       private void FillRefValue(DataTable tbl, int row, int column)
+       {
+           int columnP1 = 1;
+           var db = DbScheme.Connections["Main"];
+           string r0Text = db.ExecuteScalar<string>("select textCn from UiGlossary where name = ?", "r0");
+           string r1Text = db.ExecuteScalar<string>("select textCn from UiGlossary where name = ?", "r1");
+           string r2Text = db.ExecuteScalar<string>("select textCn from UiGlossary where name = ?", "r2");
+
+
+           for (int i = 0; i < row; i++)
+           {
+               string viewRowLabel = db.ExecuteScalar<string>("select textCn from ViewScheme where ccdId = ? and brandId = ? and viewId = ? and recordId = ?", CcdId, BrandId, 0, i);
+               DataRow labelRow = tbl.NewRow();
+               DataRow r0Row = tbl.NewRow();
+               DataRow r1Row = tbl.NewRow();
+               DataRow r2Row = tbl.NewRow();
+               string sql = "select * from CcdCompValue where ccdId = ? and brandId = ? and item between ? and ? order by item";
+
+               int itemStart = i * column;
+               int itemEnd = i * column + column - 1;
+
+               var qurey = db.Query<CcdCompValue>(sql, CcdId, BrandId, itemStart, itemEnd).ToArray();
+
+               for (int j = 0; j < column; j++)
+               {
+                   labelRow[j + columnP1] = qurey[j].Label;
+                   r0Row[j + columnP1] = qurey[j].R0;
+                   r1Row[j + columnP1] = qurey[j].R1;
+                   r2Row[j + columnP1] = qurey[j].R2;
+               }
+
+               labelRow[columnP1 - 1] = viewRowLabel;
+               r0Row[columnP1 - 1] = r0Text;
+               r1Row[columnP1 - 1] = r1Text;
+               r2Row[columnP1 - 1] = r2Text;
+               tbl.Rows.Add(labelRow);
+               tbl.Rows.Add(r2Row);
+               tbl.Rows.Add(r1Row);
+               tbl.Rows.Add(r0Row);
+           }
+
+           var dgv = StationViews.GetDgv("RefValue", CcdId);
+           if (dgv.InvokeRequired)
+           {
+               dgv.Invoke(new Action(() =>
+               {
+                   dgv.DataSource = tbl;
+                   dgv.DgvLayout();
+               }));
+           }
+           else
+           {
+               dgv.DataSource = tbl;
+               dgv.DgvLayout();
+           }
+       }
+
+
+       private void FillRawDataTable(DataTable tbl, int row, int column)
+       {
+           int columnP1 = 1;
+           var db = DbScheme.Connections["Main"];
+
+           string dataCn = db.ExecuteScalar<string>("select textCn from UiGlossary where name = ?", "RawData");
+
+
+           for (int i = 0; i < row; i++)
+           {
+               double[] rowData = (MyCogToolBlock.Outputs[string.Format("strRow{0}", i + 1)].Value as string).Split(',').Select(x => double.Parse(x)).ToArray();
+
+               string viewRowLabel = db.ExecuteScalar<string>("select textCn from ViewScheme where ccdId = ? and brandId = ? and viewId = ? and recordId = ?", CcdId, BrandId, 0, i);
+               DataRow labelRow = tbl.NewRow();
+               string sql = "select * from CcdCompValue where ccdId = ? and brandId = ? and item between ? and ? order by item";
+
+               int itemStart = i * column;
+               int itemEnd = i * column + column - 1;
+
+               var qurey = db.Query<CcdCompValue>(sql, CcdId, BrandId, itemStart, itemEnd).ToArray();
+
+               for (int j = 0; j < column; j++)
+               {
+                   labelRow[j + columnP1] = qurey[j].Label;
+               }
+
+               labelRow[columnP1 - 1] = viewRowLabel;
+
+               tbl.Rows.Add(labelRow);
+
+               DataRow dataRow = tbl.NewRow();
+               for (int j = 0; j < column; j++)
+               {
+                   dataRow[j + columnP1] = rowData[j];
+               }
+
+
+               dataRow[columnP1 - 1] = dataCn;
+
+               tbl.Rows.Add(dataRow);
+           }
+
+           var dgv = StationViews.GetDgv("RawData", CcdId);
+           if (dgv.InvokeRequired)
+           {
+               dgv.Invoke(new Action(() =>
+               {
+                   dgv.DataSource = tbl;
+                   dgv.DgvLayout();
+               }));
+           }
+           else
+           {
+               dgv.DataSource = tbl;
+               dgv.DgvLayout();
+           }
            
        }
 
@@ -238,6 +393,7 @@ namespace Hu.MachineVision.VisionPro
 
        private void RunOffline(int x)
        {
+           UiMainForm.LogMessage(string.Format("Ccd{0}开始离线运行", CcdId));
            string vppHome = Path.GetDirectoryName(VppFileName);
            DirectoryInfo diImage = new DirectoryInfo(Path.Combine(vppHome, "image"));
            if (!diImage.Exists)
@@ -265,18 +421,20 @@ namespace Hu.MachineVision.VisionPro
 
                return;
            }
-
-           for (int i = 0; i < imageCount; i++)
+           else
            {
-               var imageName = string.Format("{0}-{1}-{2}.bmp", CcdId, offlineImageCycle, i + 1).Trim('-');
-               var imageFile = Path.Combine(diImage.FullName, imageName);
-               if (File.Exists(imageFile))
+               for (int i = 0; i < imageCount; i++)
                {
-                   Bitmap bmpFile = new Bitmap(imageFile);
-                   CogImage8Grey inputImage = new CogImage8Grey(bmpFile);
-                   var outputImage = roi.Trim(inputImage);
-                   CcdTerminalIn vtIn = new CcdTerminalIn(CcdId, outputImage, i);                  
-                   VtInBlock.Post(vtIn);
+                   var imageName = string.Format("{0}-{1}-{2}.bmp", CcdId, offlineImageCycle, i + 1).Trim('-');
+                   var imageFile = Path.Combine(diImage.FullName, imageName);
+                   if (File.Exists(imageFile))
+                   {
+                       Bitmap bmpFile = new Bitmap(imageFile);
+                       CogImage8Grey inputImage = new CogImage8Grey(bmpFile);
+                       var outputImage = roi.Trim(inputImage);
+                       CcdTerminalIn vtIn = new CcdTerminalIn(CcdId, outputImage, i);
+                       VtInBlock.Post(vtIn);
+                   }
                }
            }
        }
@@ -363,7 +521,9 @@ namespace Hu.MachineVision.VisionPro
 
        public void Run()
        {
+           UiMainForm.LogMessage(string.Format("Ccd{0}开始运行", CcdId));
            MyCogToolBlock.Run();
+           RunParams.CcdDisplayBlock[CcdId].Post(1);
            RunParams.CcdCheckBlock[CcdId].Post(0);
        }
 
@@ -409,7 +569,7 @@ namespace Hu.MachineVision.VisionPro
        internal void RunOffline()
        {
            RunParams.CcdOfflineBlock[CcdId].Post(OfflineImageCycle);
-           RunParams.CcdCheckBlock[CcdId].Post(0);
+          // RunParams.CcdCheckBlock[CcdId].Post(0);
        }
     }
 }

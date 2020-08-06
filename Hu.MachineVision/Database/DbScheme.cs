@@ -74,12 +74,16 @@ namespace Hu.MachineVision.Database
            db.CreateTable<CcdParams>();
            db.CreateTable<CcdRoi>();
            db.CreateTable<CcdCompValue>();
+           db.CreateTable<UiGlossary>();
+
+           db.CreateTable<ViewScheme>();
 
            db.CreateIndex("CcdDi", new string[] { "ccdId", "name", "port" }, true);
            db.CreateIndex("CcdDo", new string[] { "ccdId", "name", "port" }, true);
            db.CreateIndex("CcdParams", new string[] { "ccdId", "brandId", "paramId", "name" }, true);
            db.CreateIndex("CcdRoi", new string[] { "ccdId", "brandId", "imageIndex" }, true);
            db.CreateIndex("CcdCompValue", new string[] { "ccdId", "brandId", "item" }, true);
+           db.CreateIndex("ViewScheme", new string[] {"ccdId", "brandId", "viewId", "recordId"}, true);
         }
 
         public static void CreateDatabaseData()
@@ -93,12 +97,23 @@ namespace Hu.MachineVision.Database
         public static void InitializeDatabaseMain()
         {
             var db = Connections["Main"];
+
             db.InsertOrIgnore(new UiParams() { Name = "ScreenWidth", Data = 1366 });
             db.InsertOrIgnore(new UiParams() { Name = "ScreenHeight", Data = 768 });
             db.InsertOrIgnore(new UiParams() { Name = "CcdCount", Data = 2 });
             db.InsertOrIgnore(new UiParams() { Name = "BrandCount", Data = 1 });
             db.InsertOrIgnore(new UiParams() { Name = "PartCountCcd1", Data = 1 });
             db.InsertOrIgnore(new UiParams() { Name = "PartCountCcd2", Data = 1 });
+
+            db.InsertOrIgnore(new UiGlossary() { Name = "k", TextEn = "K", TextCn = "补偿系数" });
+            db.InsertOrIgnore(new UiGlossary() {Name = "b", TextEn = "B", TextCn = "补偿常数" });
+            db.InsertOrIgnore(new UiGlossary() { Name = "r0", TextEn = "R0", TextCn = "标准值" });
+            db.InsertOrIgnore(new UiGlossary() { Name = "r1", TextEn = "R1", TextCn = "下限" });
+            db.InsertOrIgnore(new UiGlossary() { Name = "r2", TextEn = "R2", TextCn = "上限" });
+            db.InsertOrIgnore(new UiGlossary() { Name = "Data", TextEn = "Data", TextCn = "测量值" });
+            db.InsertOrIgnore(new UiGlossary() { Name = "RawData", TextEn = "RawData", TextCn = "原始值" });
+
+           
 
             string[] namesCn = new string[] { "针检1", "针检2"};
             string[] namesEn = new string[] { "Ccd1", "Ccd2"};
@@ -181,11 +196,21 @@ namespace Hu.MachineVision.Database
                         for(int n = 0; n < columnCount; n++)
                         {
                             int k = m * columnCount + n;
-                            db.InsertOrIgnore(new CcdCompValue() { CcdId = i, BrandId = j, Item = k, K = 1.0, B = 0.0, Name = string.Format("Row{0}", m + 1), Label = string.Format("PIN{0}", n + 1), R0 = 1.0, R1 = 0.999, R2 = 1.001 });
+                            db.InsertOrIgnore(new CcdCompValue() { CcdId = i, BrandId = j, Item = k, K = 1.0, B = 0.0, Label = string.Format("PIN{0}", n + 1), R0 = 1.0, R1 = 0.999, R2 = 1.001 });
 
                         }
                     }
                    
+                }
+            }
+
+
+            for(int i = 0; i < ccdCount; i++)
+            {
+                for(int j = 0; j < brandCount; j++)
+                {
+                    db.InsertOrIgnore(new ViewScheme() { CcdId = i, BrandId = j, Category = 0, ViewId = 0, RecordId = 0, TextEn = "", TextCn = "针有无" });
+                    db.InsertOrIgnore(new ViewScheme() { CcdId = i, BrandId = j, Category = 0, ViewId = 0, RecordId = 1, TextEn = "", TextCn = "针长短" });
                 }
             }
         }
@@ -230,9 +255,6 @@ namespace Hu.MachineVision.Database
                     db.InsertOrIgnore(cycleCcd);
                 }
             }
-
-
         }
-
     }
 }

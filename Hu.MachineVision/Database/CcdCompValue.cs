@@ -21,8 +21,8 @@ namespace Hu.MachineVision.Database
        [NotNull]
        public int Item { get; set; }
 
-       [Column("Name")]
-       public string Name { get; set; }
+       [Column("category")]
+       public int Category { get; set; }
 
        [Column("label")]
        public string Label { get; set; }

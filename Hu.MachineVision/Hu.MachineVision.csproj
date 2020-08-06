@@ -103,7 +103,9 @@
     <Compile Include="Database\CcdIO.cs" />
     <Compile Include="Database\CcdParams.cs" />
     <Compile Include="Database\CcdRoi.cs" />
+    <Compile Include="Database\ViewScheme.cs" />
     <Compile Include="Database\CcdVpp.cs" />
+    <Compile Include="Database\UiGlossary.cs" />
     <Compile Include="Database\RunStatus.cs" />
     <Compile Include="Database\DbScheme.cs" />
     <Compile Include="Database\CcdInfo.cs" />

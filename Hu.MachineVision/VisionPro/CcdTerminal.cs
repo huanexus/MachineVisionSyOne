@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
 using Cognex.VisionPro;
 using Cognex.VisionPro.ToolBlock;
 using Cognex.VisionPro.ImageProcessing;
+
+using Hu.MachineVision.Ui;
 
 namespace Hu.MachineVision.VisionPro
 {
@@ -42,7 +46,7 @@ namespace Hu.MachineVision.VisionPro
             toolBlock.Inputs["InputImage"].Value = image;
             toolBlock.Inputs["Brand"].Value = brand;
             toolBlock.Inputs["iAcquirePositionIndex"].Value = index;
-            toolBlock.Run();
+            toolBlock.Run();           
 
             RunParams.CcdDisplayBlock[CcdId].Post(1);
             RunParams.CcdCheckBlock[CcdId].Post(0);

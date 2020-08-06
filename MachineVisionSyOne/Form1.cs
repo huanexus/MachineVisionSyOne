@@ -72,12 +72,6 @@ namespace MachineVisionSyOne
 
             UiMainForm.LogMessage("程序已退出!");
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            double data = DbScheme.GetCcdParams(0, 0, 0, "Exposure");
-            UiMainForm.LogMessage(data.ToString());
-        }
          
     }
 }
