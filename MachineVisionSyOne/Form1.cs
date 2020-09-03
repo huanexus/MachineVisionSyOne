@@ -17,16 +17,20 @@ using Hu.MachineVision.Database;
 using Hu.MachineVision.VisionPro;
 using Hu.MachineVision.Helper;
 
-using Hu.Mes.Fins;
-using Hu.Serial.SerialSy;
+using Cognex.VisionPro;
 
-namespace MachineVisionCGQ
+
+
+using Hu.Serial.SerialSy;
+using Cognex.VisionPro.FGGigE;
+using Cognex.VisionPro.FGGigE.Implementation.Internal;
+
+namespace MachineVisionSyOne
 {
     public partial class Form1 : Form
     {
         public long Timestamp { get; set; }
 
-        public FinsTcp MyFinsTcp { get; set; }
 
         public ActionBlock<string> MessageBlock { get; set; }
 
@@ -47,7 +51,6 @@ namespace MachineVisionCGQ
 
             Timestamp = DateTime.Now.Ticks;
 
-            MyFinsTcp = new FinsTcp();
 
             
         }
@@ -72,28 +75,29 @@ namespace MachineVisionCGQ
             
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Timestamp = DateTime.Now.Ticks;
-            UiMainForm.LogMessage(Timestamp.ToString());
-            MyFinsTcp.WriteTimestamp(Timestamp);
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            long stamp = MyFinsTcp.ReadTimestamp();
-            UiMainForm.LogMessage(stamp.ToString());
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            DbHelper.SendData("");
-        }
 
         private void button5_Click(object sender, EventArgs e)
         {
             SyInfo a = new SyInfo(1, "COM1");
             SYMVDIO.Connect(a);
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            CogFrameGrabberGigEs cameras = new CogFrameGrabberGigEs();
+            try
+            {
+                foreach (CogFrameGrabberGigE item in cameras)
+                {
+                    item.Disconnect(false);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("关闭相机失败{０}", ex.Message));
+            }
+
+            UiMainForm.LogMessage("程序已退出!");
         }
     }
 }

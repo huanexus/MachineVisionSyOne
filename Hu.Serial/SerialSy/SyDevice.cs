@@ -49,7 +49,7 @@ namespace Hu.Serial.SerialSy
         {
             bool result = SYMVDIO.SY_MV_DO_WritePort(ConnectNum, SlaveIP, port, status);
 
-            SYMVDIO.LogStatusMessage(string.Format("连接{0}端口{1}设置", ConnectNum, PortName), status);
+
 
             return result;
         }

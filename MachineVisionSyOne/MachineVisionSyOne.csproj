@@ -7,8 +7,8 @@
     <ProjectGuid>{9C59C0B1-6EA2-4E17-A239-D2B1EBD06D3F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MachineVisionCGQ</RootNamespace>
-    <AssemblyName>MachineVisionCGQ</AssemblyName>
+    <RootNamespace>MachineVisionSyOne</RootNamespace>
+    <AssemblyName>MachineVisionSyOne</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -141,10 +141,6 @@
     <ProjectReference Include="..\Hu.MachineVision\Hu.MachineVision.csproj">
       <Project>{e647e4b4-748a-4478-9726-2085d7bd65f7}</Project>
       <Name>Hu.MachineVision</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Hu.Mes\Hu.Mes.csproj">
-      <Project>{0a3de803-de64-4382-802b-45ff5c8593c0}</Project>
-      <Name>Hu.Mes</Name>
     </ProjectReference>
     <ProjectReference Include="..\Hu.Serial\Hu.Serial.csproj">
       <Project>{9ff5b7cb-e271-4b06-baf7-8978672988d4}</Project>

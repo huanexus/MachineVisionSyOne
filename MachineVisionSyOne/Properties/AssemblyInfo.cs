@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Hu.Mes")]
+[assembly: AssemblyTitle("MachineVisionSyOne")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Hu.Mes")]
+[assembly: AssemblyProduct("MachineVisionSyOne")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("7a331a36-1990-4163-8eb1-2f32a6c25e42")]
+[assembly: Guid("ff56bf30-39ef-4b71-a671-554ba361004e")]
 
 // Version information for an assembly consists of the following four values:
 //
