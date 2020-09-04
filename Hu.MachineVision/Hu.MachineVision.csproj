@@ -95,10 +95,7 @@
     <Compile Include="Config\ProjectCcd.cs" />
     <Compile Include="Database\CcdBrand.cs" />
     <Compile Include="Database\CcdCycle.cs" />
-    <Compile Include="Database\CcdMes.cs" />
-    <Compile Include="Database\CcdSettings.cs" />
     <Compile Include="Database\CcdVpp.cs" />
-    <Compile Include="Database\DbSchemeMes.cs" />
     <Compile Include="Database\RunStatus.cs" />
     <Compile Include="Database\DbScheme.cs" />
     <Compile Include="Database\CcdInfo.cs" />

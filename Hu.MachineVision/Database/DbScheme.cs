@@ -31,12 +31,10 @@ namespace Hu.MachineVision.Database
             }
             DbFileNames["Main"] = Path.Combine(DbHome, "main.db3");
             DbFileNames["Data"] = Path.Combine(DbHome, "data.db3");
-            DbFileNames["Mes"] = Path.Combine(DbHome, "mes.db3");
             DbFileNames[""] = ":memory:";
             Connections = new Dictionary<string, SQLiteConnection>();            
             Connections["Main"] = GetConnection("Main");
             Connections["Data"] = GetConnection("Data");
-            Connections["Mes"] = GetConnection("Mes");
         }
 
         public static SQLiteConnection GetConnection(string name)
@@ -66,8 +64,7 @@ namespace Hu.MachineVision.Database
             db.CreateIndex("CcdInfo", "ccdId", true);
             
            db.CreateTable<CcdTerminal>();
-           db.CreateIndex("CcdTerminal", new string[] { "ccdId", "partId" }, true);
-           db.CreateTable<CcdSettings>();
+           db.CreateIndex("CcdTerminal", new string[] { "ccdId", "partId" }, true);           
            db.CreateTable<UiParams>();
            db.CreateTable<CcdVpp>();
         }
@@ -85,15 +82,14 @@ namespace Hu.MachineVision.Database
             var db = Connections["Main"];
             db.InsertOrIgnore(new UiParams() { Name = "ScreenWidth", Data = 1366 });
             db.InsertOrIgnore(new UiParams() { Name = "ScreenHeight", Data = 768 });
-            db.InsertOrIgnore(new UiParams() { Name = "CcdCount", Data = 3 });
-            db.InsertOrIgnore(new UiParams() { Name = "BrandCount", Data = 2 });
+            db.InsertOrIgnore(new UiParams() { Name = "CcdCount", Data = 2 });
+            db.InsertOrIgnore(new UiParams() { Name = "BrandCount", Data = 1 });
             db.InsertOrIgnore(new UiParams() { Name = "PartCountCcd1", Data = 1 });
             db.InsertOrIgnore(new UiParams() { Name = "PartCountCcd2", Data = 1 });
-            db.InsertOrIgnore(new UiParams() { Name = "PartCountCcd3", Data = 1 });
 
-            string[] namesCn = new string[] { "内针位置度", "同轴度", "激光引导" };
-            string[] namesEn = new string[] { "Ccd1", "Ccd2", "Ccd3"};
-            string[] names = { "Ccd1", "Ccd2", "Ccd3" };
+            string[] namesCn = new string[] { "针检1", "针检2"};
+            string[] namesEn = new string[] { "Ccd1", "Ccd2"};
+            string[] names = { "Ccd1", "Ccd2"};
 
             int ccdCount = names.Count();
             for (int i = 0; i < ccdCount; i++)
@@ -102,8 +98,8 @@ namespace Hu.MachineVision.Database
                 db.InsertOrIgnore(ccdInfo);
             }
 
-            string[] brands = new string[] { "CGQ-001", "CGQ-002" };
-            string[] brandsAlias = new string[] { "CGQ-001", "CGQ-002" };
+            string[] brands = new string[] { "TJC8" };
+            string[] brandsAlias = new string[] { "8"};
 
             int brandCount = brands.Count();
 

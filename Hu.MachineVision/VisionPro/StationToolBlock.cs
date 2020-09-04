@@ -47,7 +47,32 @@ namespace Hu.MachineVision.VisionPro
            else
            {
                MyCogToolBlock = new CogToolBlock();
+           }          
+
+           if(!MyCogToolBlock.Inputs.Contains("InputImage"))
+           {
+               MyCogToolBlock.Inputs.Add(new CogToolBlockTerminal("InputImage", new CogImage8Grey()));
            }
+
+           if (!MyCogToolBlock.Inputs.Contains("Brand"))
+           {
+               MyCogToolBlock.Inputs.Add(new CogToolBlockTerminal("Brand", ""));
+           }
+
+           if (!MyCogToolBlock.Inputs.Contains("iAcquirePositionIndex"))
+           {
+               MyCogToolBlock.Inputs.Add(new CogToolBlockTerminal("iAcquirePositionIndex", 0));
+           }
+
+           if(!MyCogToolBlock.Inputs.Contains("iViewRow"))
+           {
+               MyCogToolBlock.Inputs.Add(new CogToolBlockTerminal("iViewRow", 1));
+           }
+
+           if (!MyCogToolBlock.Inputs.Contains("iViewColumn"))
+           {
+               MyCogToolBlock.Inputs.Add(new CogToolBlockTerminal("iViewColumn", 20));
+           }          
 
            return MyCogToolBlock;
        }

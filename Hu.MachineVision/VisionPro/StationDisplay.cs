@@ -36,7 +36,7 @@ namespace Hu.MachineVision.VisionPro
             DisplayWindows = new CogRecordDisplay[ccdCount];
             var tp = MyTabs["Display", 0];
             int width = tp.Width / 2;
-            int height = tp.Height / 2;
+            int height = tp.Height;
 
             for (int i = 0; i < ccdCount; i++)
             {
@@ -56,9 +56,6 @@ namespace Hu.MachineVision.VisionPro
 
             Panels[1].Location = new Point(width, 0);
             Panels[1].Size = new Size(width, height);            
-
-            Panels[2].Location = new Point(0, height);
-            Panels[2].Size = new Size(width * 2, height);
 
             for (int i = 0; i < CcdCount; i++)
             {
@@ -132,14 +129,12 @@ namespace Hu.MachineVision.VisionPro
             {
                 var tp = MyTabs["Display", 0];
                 int width = tp.Width / 2;
-                int height = tp.Height / 2;
+                int height = tp.Height;
                 Panels[0].Location = new Point(0, 0);
                 Panels[0].Size = new Size(width, height);
                 Panels[1].Location = new Point(width, 0);
                 Panels[1].Size = new Size(width, height);
-                Panels[2].Location = new Point(0, height);
-                Panels[2].Size = new Size(width * 2, height);
-
+  
                 for (int i = 0; i < CcdCount; i++)
                 {
                     Panels[i].Show();

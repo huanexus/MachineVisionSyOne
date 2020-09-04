@@ -41,7 +41,6 @@ namespace Hu.MachineVision.Ui
        static UiMainForm()
        {
            DbScheme.Create();
-           DbSchemeMes.Create();
            var db = DbScheme.Connections["Main"];
 
            int ccdCount = db.ExecuteScalar<int>("select data from UiParams where name = ?", "CcdCount");
