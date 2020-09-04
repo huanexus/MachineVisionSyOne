@@ -47,7 +47,6 @@ namespace Hu.MachineVision.Database
 
         [Column("comPort")]
         [NotNull]
-        [Unique]
         public int ComPort { get; set; }
     }
 }

@@ -143,7 +143,7 @@ namespace Hu.MachineVision.Database
                 db.InsertOrIgnore(new CcdDi() { CcdId = i, Name = "Reset", Port = 4 });
                 db.InsertOrIgnore(new CcdDo() { CcdId = i, Name = "Done", Port = 0 });
                 db.InsertOrIgnore(new CcdDo() { CcdId = i, Name = "Ok", Port = 1 });
-                db.InsertOrIgnore(new CcdDo() { CcdId = i, Name = "Ng", Port = 1 });
+                db.InsertOrIgnore(new CcdDo() { CcdId = i, Name = "Ng", Port = 2 });
                 db.InsertOrIgnore(new CcdSerial() { CcdId = i, ComPort = i + 1 });
             }
         }

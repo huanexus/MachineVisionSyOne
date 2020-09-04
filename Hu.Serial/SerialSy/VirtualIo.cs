@@ -21,15 +21,11 @@ namespace Hu.Serial.SerialSy
         public string[] Names { get; set; }
         public string[] Labels { get; set; }
         public int[] Values { get; set; }
-        public BitArray[] Bits { get; set; }
-        public BitArray[] oldBits { get; set; }
         public SyDevice Device { get; set; }
         public int Channel { get; set; }
 
         public int Id { get { return Channel; } }
 
-        public int DiPortCount { get; set; }
-        public int DoPortCount { get; set; }
         public System.Timers.Timer ScDiTimer { get; set; }
         public System.Timers.Timer ScDoTimer { get; set; }
         public static int DeviceNum { get; set; }
@@ -57,8 +53,6 @@ namespace Hu.Serial.SerialSy
             Names = new string[] { "DI", "DO", };
             Labels = new string[] { "输入", "输出" };
             Values = new int[] { 0, 0 };
-            Bits = new BitArray[] { new BitArray(8), new BitArray(8) };
-            oldBits = new BitArray[] { new BitArray(8), new BitArray(8) };
             TrigCount = 0;
             Channel = channel;
 

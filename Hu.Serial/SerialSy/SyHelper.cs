@@ -21,6 +21,8 @@ namespace Hu.Serial.SerialSy
            var tp = tabs["Serial", ccd];
 
            io.Associate(tp);
+
+           vIo.StartWatch();
        }
 
     }

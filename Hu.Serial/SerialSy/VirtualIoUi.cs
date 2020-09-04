@@ -192,6 +192,9 @@ namespace Hu.Serial.SerialSy
             {
                 Io.GetDiStatus();
                 Io.GetDoStatus();
+                Di = Io.Di;
+                Do = Io.Do;
+                
                 ShowDo(Di);
                 ShowDo(Do);
             }

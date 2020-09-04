@@ -32,7 +32,7 @@ namespace Hu.Serial.SerialSy
         {
             lock(mLocker)
             {
-                return SYMVDIO.SY_MV_DO_ReadBackLine(ConnectNum, SlaveIP, ref inputsta);
+                return SYMVDIO.SY_MV_DI_ReadLine(ConnectNum, SlaveIP, ref inputsta);
             }
         }
 
