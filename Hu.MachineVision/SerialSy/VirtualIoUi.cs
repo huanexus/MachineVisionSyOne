@@ -12,7 +12,7 @@ using System.Drawing;
 using System.Threading.Tasks.Dataflow;
 
 
-namespace Hu.Serial.SerialSy
+namespace Hu.MachineVision.SerialSy
 {
     public class VirtualIoUi
     {

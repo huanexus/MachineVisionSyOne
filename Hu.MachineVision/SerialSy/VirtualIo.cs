@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using Hu.MachineVision.Database;
 using Hu.MachineVision.Ui;
 
-namespace Hu.Serial.SerialSy
+namespace Hu.MachineVision.SerialSy
 {
 
     public partial class VirtualIo

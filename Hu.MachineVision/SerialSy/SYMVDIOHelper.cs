@@ -8,7 +8,7 @@ using System.IO.Ports;
 
 using System.Threading.Tasks.Dataflow;
 
-namespace Hu.Serial.SerialSy
+namespace Hu.MachineVision.SerialSy
 {
     public static partial class SYMVDIO
     {

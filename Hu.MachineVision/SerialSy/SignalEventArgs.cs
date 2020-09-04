@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Hu.Serial.SerialSy
+namespace Hu.MachineVision.SerialSy
 {
     public class SignalEventArgs
     {

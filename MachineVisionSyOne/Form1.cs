@@ -21,7 +21,7 @@ using Cognex.VisionPro;
 
 
 
-using Hu.Serial.SerialSy;
+using Hu.MachineVision.SerialSy;
 using Cognex.VisionPro.FGGigE;
 using Cognex.VisionPro.FGGigE.Implementation.Internal;
 

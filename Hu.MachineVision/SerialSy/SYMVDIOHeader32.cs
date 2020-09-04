@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 using System.Runtime.InteropServices;
 
-namespace Hu.Serial.SerialSy
+namespace Hu.MachineVision.SerialSy
 {
-   public class SYMVDIOHeader64
+   public class SYMVDIOHeader32
     {
-        const string DLL_FILENAME = "SYMVDIO_X64D.dll";
+        const string DLL_FILENAME = "SYMVDIO_D.dll";
         [DllImport(DLL_FILENAME, EntryPoint = "SY_MV_DIO_ComPort_Connect", CallingConvention = CallingConvention.StdCall)]
         public static extern int SY_MV_DIO_ComPort_Connect(int Connect_Num);
         [DllImport(DLL_FILENAME, EntryPoint = "SY_MV_DIO_Disconnect", CallingConvention = CallingConvention.StdCall)]

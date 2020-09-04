@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Hu.MachineVision.Ui;
 
-namespace Hu.Serial.SerialSy
+namespace Hu.MachineVision.SerialSy
 {
    public static class SyHelper
     {

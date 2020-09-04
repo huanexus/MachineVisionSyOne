@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hu.Serial
+namespace Hu.MachineVision.SerialSy
 {
     public interface ISerialDeviceInfo
     {

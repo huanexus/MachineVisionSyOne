@@ -105,6 +105,16 @@
     <Compile Include="Database\UiParams.cs" />
     <Compile Include="Helper\VppHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerialSy\ISerialDeviceInfo.cs" />
+    <Compile Include="SerialSy\SignalEventArgs.cs" />
+    <Compile Include="SerialSy\SyDevice.cs" />
+    <Compile Include="SerialSy\SyHelper.cs" />
+    <Compile Include="SerialSy\SYMVDIO.cs" />
+    <Compile Include="SerialSy\SYMVDIOHeader32.cs" />
+    <Compile Include="SerialSy\SYMVDIOHeader64.cs" />
+    <Compile Include="SerialSy\SYMVDIOHelper.cs" />
+    <Compile Include="SerialSy\VirtualIo.cs" />
+    <Compile Include="SerialSy\VirtualIoUi.cs" />
     <Compile Include="Ui\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -132,6 +142,7 @@
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
