@@ -34,6 +34,8 @@ namespace Hu.Serial.SerialSy
         public event EventHandler<SignalEventArgs> DiChanged;
         public event EventHandler<SignalEventArgs> DoChanged;
 
+        public event EventHandler<GrabEventArgs> Grab;
+
         public int[] mDiPorts { get; set; }
         public int TrigCount { get; set; }
         public Dictionary<string, int> DiPorts { get; set; }
@@ -75,6 +77,32 @@ namespace Hu.Serial.SerialSy
             int comPort = db.ExecuteScalar<int>("select comPort from CcdSerial where ccdId = ?", Id);
             string portName = "COM" + comPort;
             Device = new SyDevice(Id, portName);
+
+            DiChanged += VirtualIo_DiChanged;
+            DoChanged += VirtualIo_DoChanged;
+            
+        }
+
+        void VirtualIo_DoChanged(object sender, SignalEventArgs e)
+        {
+            
+        }
+
+        void VirtualIo_DiChanged(object sender, SignalEventArgs e)
+        {
+            int signal = e.Signal;
+            int oldSignal = e.OldSignal;
+
+            int trig = signal & (1 << DiPorts["Trig"]);
+            int oldTrig = oldSignal & (1 << DiPorts["Trig"]);
+
+            if(oldTrig == 0 && trig == 1)
+            {
+                if(Grab != null)
+                {
+                    Grab(this, new GrabEventArgs(0));
+                }
+            }
         }
 
         public static VirtualIo GetDevice(int channel)
@@ -275,6 +303,15 @@ namespace Hu.Serial.SerialSy
             ResetPort("Ok");
             ResetPort("Ng");
             ResetPort("Done");
+        }
+    }
+
+    public class GrabEventArgs : EventArgs
+    {
+        public int Trig { get; set; }
+        public GrabEventArgs(int trig)
+        {
+            Trig = trig;
         }
     }
 }
