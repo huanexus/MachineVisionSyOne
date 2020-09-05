@@ -67,14 +67,12 @@ namespace Hu.MachineVision.VisionPro
            var db = DbScheme.Connections["Main"];
            int row = db.ExecuteScalar<int>("select row from CcdTerminal where ccdId = ?", CcdId);
            int column = db.ExecuteScalar<int>("select column from CcdTerminal where ccdId = ?", CcdId);
+
            DataTable tblRawData = CreateDataTable(row, column);
            FillRawDataTable(tblRawData, row, column);
 
            DataTable tblData = CreateDataTable(row, column);
-           FillDataTable(tblData, row, column);
-
-
-           
+           FillDataTable(tblData, row, column);           
        }
 
        private bool FillDataTable(DataTable tbl, int row, int column)
@@ -82,9 +80,29 @@ namespace Hu.MachineVision.VisionPro
            bool result = false;
            int columnP1 = 1;
            var db = DbScheme.Connections["Main"];
+
+           bool bSuccess = (MyCogToolBlock.RunStatus.Result == CogToolResultConstants.Accept);
+
+           foreach(CogToolBlock toolBlock in MyCogToolBlock.Tools.OfType<CogToolBlock>())
+           {
+               if(toolBlock.RunStatus.Result != CogToolResultConstants.Accept)
+               {
+                   bSuccess = false;
+               }
+           }
+
+           double ErrorValue = -1000000.0;
+
            for (int i = 0; i < row; i++)
            {
                double[] rowData = (MyCogToolBlock.Outputs[string.Format("strRow{0}", i + 1)].Value as string).Split(',').Select(x => double.Parse(x)).ToArray();
+               if(!bSuccess)
+               {
+                   for(int ic = 0; ic < rowData.Length; ic++)
+                   {
+                       rowData[ic] = ErrorValue;
+                   }
+               }
                DataRow labelRow = tbl.NewRow();
                DataRow r1Row = tbl.NewRow();
                DataRow r2Row = tbl.NewRow();

@@ -45,7 +45,6 @@ namespace Hu.MachineVision.VisionPro
             toolBlock.Run();
 
             RunParams.CcdDisplayBlock[CcdId].Post(1);
-
             RunParams.CcdCheckBlock[CcdId].Post(0);
         }       
     }
