@@ -73,11 +73,13 @@ namespace Hu.MachineVision.Database
            db.CreateTable<CcdSerial>();
            db.CreateTable<CcdParams>();
            db.CreateTable<CcdRoi>();
+           db.CreateTable<CcdCompValue>();
 
            db.CreateIndex("CcdDi", new string[] { "ccdId", "name", "port" }, true);
            db.CreateIndex("CcdDo", new string[] { "ccdId", "name", "port" }, true);
            db.CreateIndex("CcdParams", new string[] { "ccdId", "brandId", "paramId", "name" }, true);
            db.CreateIndex("CcdRoi", new string[] { "ccdId", "brandId", "imageIndex" }, true);
+           db.CreateIndex("CcdCompValue", new string[] { "ccdId", "brandId", "item" }, true);
         }
 
         public static void CreateDatabaseData()
@@ -164,6 +166,25 @@ namespace Hu.MachineVision.Database
                 for(int j = 0; j < brandCount; j++)
                 {
                     db.InsertOrIgnore(new CcdRoi(){CcdId = i, BrandId = j, ImageIndex = 0, X0 = 500, Y0 = 950, Width = 2000, Height = 600 });
+                }
+            }
+
+            for(int i = 0; i < ccdCount; i++)
+            {
+                for(int j = 0; j < brandCount; j++)
+                {
+                    int rowCount = db.ExecuteScalar<int>("select row from CcdTerminal where ccdId = ?", i);
+                    int columnCount = db.ExecuteScalar<int>("select column from CcdTerminal where ccdId = ?", i);
+
+                    int cellCount = rowCount * columnCount;
+
+                    for(int k = 0; k < cellCount; k++)
+                    {
+                        int columnIndex = k % columnCount;
+                        int rowIndex = i;
+                        db.InsertOrIgnore(new CcdCompValue() { CcdId = i, BrandId = j, Item = k, K = 1.0, B = 0.0, Name = string.Format("Row{0}", i + 1), Label = string.Format("PIN{0}", columnIndex + 1), R0 = 1.0, R1 = 0.999, R2 = 1.001 });
+                    }
+                    
                 }
             }
         }

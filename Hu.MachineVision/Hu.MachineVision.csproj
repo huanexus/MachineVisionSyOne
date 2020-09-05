@@ -98,6 +98,7 @@
   <ItemGroup>
     <Compile Include="Config\ProjectCcd.cs" />
     <Compile Include="Database\CcdBrand.cs" />
+    <Compile Include="Database\CcdCompValue.cs" />
     <Compile Include="Database\CcdCycle.cs" />
     <Compile Include="Database\CcdIO.cs" />
     <Compile Include="Database\CcdParams.cs" />
