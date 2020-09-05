@@ -67,35 +67,94 @@ namespace Hu.MachineVision.VisionPro
            var db = DbScheme.Connections["Main"];
            int row = db.ExecuteScalar<int>("select row from CcdTerminal where ccdId = ?", CcdId);
            int column = db.ExecuteScalar<int>("select column from CcdTerminal where ccdId = ?", CcdId);
+           DataTable tblRawData = CreateDataTable(row, column);
+           FillRawDataTable(tblRawData, row, column);
 
-           DataTable tbl = CreateDataTable(row, column);
-           FillRawDataTable(tbl, row, column);
-           var dgv = StationViews.GetDgv("Data", CcdId);
+           DataTable tblData = CreateDataTable(row, column);
+           FillDataTable(tblData, row, column);
 
-           if(dgv.InvokeRequired)
+
+           
+       }
+
+       private bool FillDataTable(DataTable tbl, int row, int column)
+       {
+           bool result = false;
+           int columnP1 = 1;
+           var db = DbScheme.Connections["Main"];
+           for (int i = 0; i < row; i++)
            {
-               dgv.Invoke(new Action(() => 
+               double[] rowData = (MyCogToolBlock.Outputs[string.Format("strRow{0}", i + 1)].Value as string).Split(',').Select(x => double.Parse(x)).ToArray();
+               DataRow labelRow = tbl.NewRow();
+               DataRow r1Row = tbl.NewRow();
+               DataRow r2Row = tbl.NewRow();
+               string sql = "select * from CcdCompValue where ccdId = ? and brandId = ? and item between ? and ? order by item";
+
+               int itemStart = i * column;
+               int itemEnd = i * column + column - 1;
+
+               var qurey = db.Query<CcdCompValue>(sql, CcdId, BrandId, itemStart, itemEnd).ToArray();
+               for (int j = 0; j < column; j++)
+               {
+                   labelRow[j + columnP1] = qurey[j].Label;
+                   r1Row[j + columnP1] = qurey[j].R1;
+                   r2Row[j + columnP1] = qurey[j].R2;
+               }
+
+               tbl.Rows.Add(labelRow);
+               tbl.Rows.Add(r2Row);
+               tbl.Rows.Add(r1Row);
+
+               DataRow dataRow = tbl.NewRow();
+               for (int j = 0; j < column; j++)
+               {
+                   dataRow[j + columnP1] = rowData[j];
+               }
+
+               tbl.Rows.Add(dataRow);
+           }
+
+           var dgv = StationViews.GetDgv("Data", CcdId);
+           if (dgv.InvokeRequired)
+           {
+               dgv.Invoke(new Action(() =>
                {
                    dgv.DataSource = tbl;
                    dgv.DgvLayout();
+                   result = dgv.CheckResultData(row, column);
                }));
            }
            else
            {
                dgv.DataSource = tbl;
-               dgv.DgvLayout();           
+               dgv.DgvLayout();
+               result = dgv.CheckResultData(row, column);
            }
+
+           return result;
+
        }
 
        private void FillRawDataTable(DataTable tbl, int row, int column)
        {
           int columnP1 = 1;
+          var db = DbScheme.Connections["Main"];
           for(int i = 0; i < row; i++)
           {
-
               double[] rowData = (MyCogToolBlock.Outputs[string.Format("strRow{0}", i + 1)].Value as string).Split(',').Select(x => double.Parse(x)).ToArray();
-
               DataRow labelRow = tbl.NewRow();
+              string sql = "select * from CcdCompValue where ccdId = ? and brandId = ? and item between ? and ? order by item";
+
+              int itemStart = i * column;
+              int itemEnd = i * column + column - 1;
+
+              var qurey = db.Query<CcdCompValue>(sql, CcdId, BrandId, itemStart, itemEnd).ToArray();
+
+              for (int j = 0; j < column; j++)
+              {
+                 labelRow[j + columnP1] = qurey[j].Label;
+              }              
+
 
               tbl.Rows.Add(labelRow);
 
@@ -106,6 +165,21 @@ namespace Hu.MachineVision.VisionPro
               }
 
               tbl.Rows.Add(dataRow);
+          }
+
+          var dgv = StationViews.GetDgv("RawData", CcdId);
+          if (dgv.InvokeRequired)
+          {
+              dgv.Invoke(new Action(() =>
+              {
+                  dgv.DataSource = tbl;
+                  dgv.DgvLayout();
+              }));
+          }
+          else
+          {
+              dgv.DataSource = tbl;
+              dgv.DgvLayout();
           }
            
        }
@@ -167,7 +241,8 @@ namespace Hu.MachineVision.VisionPro
                {
                    Bitmap bmpFile = new Bitmap(imageFile);
                    CogImage8Grey inputImage = new CogImage8Grey(bmpFile);
-                   CcdTerminalIn vtIn = new CcdTerminalIn(CcdId, inputImage, i);
+                   var outputImage = roi.Trim(inputImage);
+                   CcdTerminalIn vtIn = new CcdTerminalIn(CcdId, outputImage, i);                  
                    VtInBlock.Post(vtIn);
                }
            }

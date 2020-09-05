@@ -128,7 +128,7 @@ namespace Hu.MachineVision.Database
             {
                 for (int j = 0; j < parts[i]; j++)
                 {
-                    var ccdTerminal = new CcdTerminal() { CcdId = i, PartId = j, Image = 1, Row = 1, Column = 1 };
+                    var ccdTerminal = new CcdTerminal() { CcdId = i, PartId = j, Image = 1, Row = 2, Column = 20 };
                     db.InsertOrIgnore(ccdTerminal);
                 }
 
@@ -165,7 +165,7 @@ namespace Hu.MachineVision.Database
             {
                 for(int j = 0; j < brandCount; j++)
                 {
-                    db.InsertOrIgnore(new CcdRoi(){CcdId = i, BrandId = j, ImageIndex = 0, X0 = 500, Y0 = 950, Width = 2000, Height = 600 });
+                    db.InsertOrIgnore(new CcdRoi(){CcdId = i, BrandId = j, ImageIndex = 0, X0 = 0, Y0 = 950, Width = 2500, Height = 600 });
                 }
             }
 
@@ -176,15 +176,16 @@ namespace Hu.MachineVision.Database
                     int rowCount = db.ExecuteScalar<int>("select row from CcdTerminal where ccdId = ?", i);
                     int columnCount = db.ExecuteScalar<int>("select column from CcdTerminal where ccdId = ?", i);
 
-                    int cellCount = rowCount * columnCount;
-
-                    for(int k = 0; k < cellCount; k++)
+                    for (int m = 0; m < rowCount; m++)
                     {
-                        int columnIndex = k % columnCount;
-                        int rowIndex = i;
-                        db.InsertOrIgnore(new CcdCompValue() { CcdId = i, BrandId = j, Item = k, K = 1.0, B = 0.0, Name = string.Format("Row{0}", i + 1), Label = string.Format("PIN{0}", columnIndex + 1), R0 = 1.0, R1 = 0.999, R2 = 1.001 });
+                        for(int n = 0; n < columnCount; n++)
+                        {
+                            int k = m * columnCount + n;
+                            db.InsertOrIgnore(new CcdCompValue() { CcdId = i, BrandId = j, Item = k, K = 1.0, B = 0.0, Name = string.Format("Row{0}", m + 1), Label = string.Format("PIN{0}", n + 1), R0 = 1.0, R1 = 0.999, R2 = 1.001 });
+
+                        }
                     }
-                    
+                   
                 }
             }
         }

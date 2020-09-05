@@ -138,23 +138,22 @@ namespace Hu.MachineVision.Ui
                
            }
 
-           //for (int i = 0; i < Project.CcdCount; i++)
-           //{
-           //    var station = new StationViewRawData(i);
+           for (int i = 0; i < Project.CcdCount; i++)
+           {
+               var station = new StationViewRawData(i);
 
-           //}
+           }
 
-           //for (int i = 0; i < Project.CcdCount; i++)
-           //{
-           //    var station = new StationViewCompValue(i);
+           for (int i = 0; i < Project.CcdCount; i++)
+           {
+               var station = new StationViewCompValue(i);
 
-           //}
+           }
 
-           //for (int i = 0; i < Project.CcdCount; i++)
-           //{
-           //    var station = new StationViewRefValue(i);
-
-           //}
+           for (int i = 0; i < Project.CcdCount; i++)
+           {
+               var station = new StationViewRefValue(i);
+           }
        }
 
        public static void LogMessage(string message)

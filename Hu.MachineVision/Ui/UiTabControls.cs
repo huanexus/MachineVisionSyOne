@@ -98,11 +98,8 @@ namespace Hu.MachineVision.Ui
 
         public void AddTabData(Panel panel)
         {
-            //string[] names = { "Data", "RawData", "CompValue", "RefValue" };
-            //string[] texts = { "结果值", "原始值", "补偿值", "标准值" };
-
-            string[] names = { "Data"};
-            string[] texts = { "结果值"};
+            string[] names = { "Data", "RawData", "CompValue", "RefValue" };
+            string[] texts = { "结果值", "原始值", "补偿值", "标准值" };
 
             int groupCount = names.Count();
             int ccdCount = Project.CcdCount;
