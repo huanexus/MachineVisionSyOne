@@ -72,10 +72,12 @@ namespace Hu.MachineVision.Database
            db.CreateTable<CcdDo>();
            db.CreateTable<CcdSerial>();
            db.CreateTable<CcdParams>();
+           db.CreateTable<CcdRoi>();
 
            db.CreateIndex("CcdDi", new string[] { "ccdId", "name", "port" }, true);
            db.CreateIndex("CcdDo", new string[] { "ccdId", "name", "port" }, true);
            db.CreateIndex("CcdParams", new string[] { "ccdId", "brandId", "paramId", "name" }, true);
+           db.CreateIndex("CcdRoi", new string[] { "ccdId", "brandId", "imageIndex" }, true);
         }
 
         public static void CreateDatabaseData()
@@ -154,6 +156,14 @@ namespace Hu.MachineVision.Database
                 for(int j = 0; j < brandCount; j++)
                 {
                     db.InsertOrIgnore(new CcdParams() { CcdId = i, BrandId = j, ParamId = 0, Name = "Exposure", Data = 35 });
+                }
+            }
+
+            for(int i = 0; i < ccdCount; i++)
+            {
+                for(int j = 0; j < brandCount; j++)
+                {
+                    db.InsertOrIgnore(new CcdRoi(){CcdId = i, BrandId = j, ImageIndex = 0, X0 = 500, Y0 = 950, Width = 2000, Height = 600 });
                 }
             }
         }

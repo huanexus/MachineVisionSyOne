@@ -50,7 +50,16 @@ namespace Hu.MachineVision.VisionPro
                RunParams.CcdGrabBlock[CcdId] = new ActionBlock<int>(x => OnGrabImage(x));
                RunParams.CcdOfflineBlock[CcdId] = new ActionBlock<int>(x => RunOffline(x));
                RunParams.CcdCheckBlock[CcdId] = new ActionBlock<int>(x => CheckResult(x));
+               RunParams.CcdDisplayBlock[CcdId] = new ActionBlock<int>(x => DisplayShow(x));
            }
+       }
+
+       private void DisplayShow(int x)
+       {
+           var station = StationDisplay.GetStation(CcdId);
+           var display = station[CcdId];
+           display.Record = MyCogToolBlock.Tools.OfType<CogToolBlock>().Last().CreateLastRunRecord().SubRecords[x];
+           display.AutoFit = true;
        }
 
        private void CheckResult(int x)
@@ -74,11 +83,8 @@ namespace Hu.MachineVision.VisionPro
            else
            {
                dgv.DataSource = tbl;
-               dgv.DgvLayout();
-           
+               dgv.DgvLayout();           
            }
-
-
        }
 
        private void FillRawDataTable(DataTable tbl, int row, int column)
@@ -135,6 +141,8 @@ namespace Hu.MachineVision.VisionPro
            int imageCount = 1;
            var toolBlock = MyCogToolBlock;
 
+           VisionRoi roi = new VisionRoi(CcdId);
+
            int offlineImageCycle = x;
 
            if (offlineImageCycle == 0)
@@ -143,7 +151,8 @@ namespace Hu.MachineVision.VisionPro
                for (int i = 0; i < imageCount; i++)
                {
                    CogImage8Grey inputImage = myCogIPOneImageTools[i].OutputImage as CogImage8Grey;
-                   CcdTerminalIn vtIn = new CcdTerminalIn(CcdId, inputImage, i);
+                   var outputImage = roi.Trim(inputImage);
+                   CcdTerminalIn vtIn = new CcdTerminalIn(CcdId, outputImage, i);
                    VtInBlock.Post(vtIn);
                }
 

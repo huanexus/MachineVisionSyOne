@@ -44,6 +44,8 @@ namespace Hu.MachineVision.VisionPro
             toolBlock.Inputs["iAcquirePositionIndex"].Value = index;
             toolBlock.Run();
 
+            RunParams.CcdDisplayBlock[CcdId].Post(1);
+
             RunParams.CcdCheckBlock[CcdId].Post(0);
         }       
     }

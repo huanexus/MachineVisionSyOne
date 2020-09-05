@@ -101,6 +101,7 @@
     <Compile Include="Database\CcdCycle.cs" />
     <Compile Include="Database\CcdIO.cs" />
     <Compile Include="Database\CcdParams.cs" />
+    <Compile Include="Database\CcdRoi.cs" />
     <Compile Include="Database\CcdVpp.cs" />
     <Compile Include="Database\RunStatus.cs" />
     <Compile Include="Database\DbScheme.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="VisionPro\StationToolBlockEdit.cs" />
     <Compile Include="VisionPro\StationToolBlock.cs" />
     <Compile Include="VisionPro\VisionAcqFifo.cs" />
+    <Compile Include="VisionPro\VisionRoiTrim.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -84,7 +84,9 @@ namespace Hu.MachineVision.VisionPro
             {
                 MyAcqFifo = MyCogAcqFifos[CameraIndex];
                 MyAcqFifo.OwnedExposureParams.Exposure = exposure;
-                MyImage = (ICogImage)MyAcqFifo.Acquire(out trigNum);
+                MyImage = (ICogImage)MyAcqFifo.Acquire(out trigNum);                
+                VisionRoi roi = new VisionRoi(CcdId);
+                MyImage = roi.Trim(MyImage as CogImage8Grey);                
                 TrigNum = trigNum;
             }
             catch

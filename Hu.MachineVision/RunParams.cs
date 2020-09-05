@@ -15,11 +15,14 @@ namespace Hu.MachineVision
 
        public static Dictionary<int, ActionBlock<int>> CcdCheckBlock { get; set; }
 
+       public static Dictionary<int, ActionBlock<int>> CcdDisplayBlock { get; set; }
+
        static RunParams()
        {
            CcdGrabBlock = new Dictionary<int, ActionBlock<int>>();
            CcdOfflineBlock = new Dictionary<int, ActionBlock<int>>();
            CcdCheckBlock = new Dictionary<int, ActionBlock<int>>();
+           CcdDisplayBlock = new Dictionary<int, ActionBlock<int>>();
        }
     }
 }

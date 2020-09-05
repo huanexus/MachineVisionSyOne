@@ -20,8 +20,9 @@ namespace Hu.MachineVision
            for (int i = 0; i < dgv.Columns.Count; i++)
            {
                dgv.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
-               dgv.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-               dgv.Columns[i].MinimumWidth = 40;
+              // dgv.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+              //  dgv.Columns[i].MinimumWidth = 40;
+               dgv.Columns[i].Width = 40;
            }
 
            if (dgv.ColumnCount > 10)
