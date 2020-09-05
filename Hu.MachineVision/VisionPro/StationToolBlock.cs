@@ -149,6 +149,21 @@ namespace Hu.MachineVision.VisionPro
                result = dgv.CheckResultData(row, column);
            }
 
+           VirtualIo vIo = VirtualIo.GetDevice(CcdId);
+           
+           if(result)
+           {
+               vIo.SetOk();
+               UiMainForm.LogMessage(string.Format("Ccd{0}输出OK信号", CcdId));
+           }
+           else
+           {
+               vIo.SetNg();
+               UiMainForm.LogMessage(string.Format("Ccd{0}输出NG信号", CcdId));
+           }
+
+           UiMainForm.LogMessage(string.Format("Ccd{0}运行结束", CcdId));
+
            return result;
 
        }
@@ -271,11 +286,13 @@ namespace Hu.MachineVision.VisionPro
            var grabBlobk = RunParams.CcdGrabBlock[CcdId];
            int imageIndex = x;
 
+           UiMainForm.LogMessage(string.Format("Ccd{0}开始拍照", CcdId));
+
            var vIo = VirtualIo.GetDevice(CcdId);
 
            if(imageIndex == 0)
            {
-               for(int i = 0; i < 3; i++)
+               for(int i = 1; i < 3; i++)
                {
                    vIo.ResetPort(i);
                }
